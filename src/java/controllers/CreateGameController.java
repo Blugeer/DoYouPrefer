@@ -18,6 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class CreateGameController {
+    /* Pour connecter un service 
+    @Autowired
+    HelloService helloService ;*/
     
     @RequestMapping(value="createGame", method = RequestMethod.GET)
     public String init(){

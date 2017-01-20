@@ -13,12 +13,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author natha_000
  */
 @Entity
+@Table(name="Message")
 public class MessageEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,22 +33,22 @@ public class MessageEntity implements Serializable {
     
     @ManyToOne
     @JoinColumn(name="personneToMessage_fk")
-    private Personne personne;
+    private PersonneEntity personneToMessage;
     
     @ManyToOne
     @JoinColumn(name="questionToMessage_fk")
-    private Question question;
+    private QuestionEntity questionToMessage;
     
     public MessageEntity(){
-        this.contenu= "" ;
-        this.personne= new Personne();
-        this.question = new Question();
+        /*this.contenu= "" ;
+        this.personneToMessage= new PersonneEntity();
+        this.questionToMessage = new QuestionEntity();*/
     } 
     
-    public MessageEntity(String contenu, Personne personne, Question question){
+    public MessageEntity(String contenu, PersonneEntity personne, QuestionEntity question){
         this.contenu = contenu;
-        this.personne = personne;
-        this.question = question;
+        this.personneToMessage = personne;
+        this.questionToMessage = question;
     }
     
     public Long getId() {
@@ -60,11 +62,11 @@ public class MessageEntity implements Serializable {
     public String getContenu() { return this.contenu; }
     public void setContenu(String contenu) { this.contenu=contenu; }
     
-    public Personne getPersonne() { return this.personne; }
-    public void setPersonne(Personne personne) { this.personne=personne; }
+    public PersonneEntity getPersonne() { return this.personneToMessage; }
+    public void setPersonne(PersonneEntity personneToMessage) { this.personneToMessage=personneToMessage; }
     
-    public Question getQuestion() { return this.question; }
-    public void setQuestion(Question question) { this.question=question; }
+    public QuestionEntity getQuestion() { return this.questionToMessage; }
+    public void setQuestion(QuestionEntity questionToMessage) { this.questionToMessage=questionToMessage; }
 
     @Override
     public int hashCode() {

@@ -13,12 +13,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author natha_000
  */
 @Entity
+@Table(name="Reponse")
 public class ReponseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,22 +33,22 @@ public class ReponseEntity implements Serializable {
     
     @ManyToOne
     @JoinColumn(name="personneToReponse_fk")
-    private Personne personne;
+    private PersonneEntity personneToReponse;
     
     @ManyToOne
     @JoinColumn(name="questionToReponse_fk")
-    private Question question;
+    private QuestionEntity questionToReponse;
     
     public ReponseEntity(){
-        this.choix = "";
-        this.personne = new Personne();
-        this.question = new Question();
+        /*this.choix = "";
+        this.personneToReponse = new PersonneEntity();
+        this.questionToReponse = new QuestionEntity();*/
     }
     
-    public ReponseEntity(String choix, Personne personne, Question question){
+    public ReponseEntity(String choix, PersonneEntity personneToReponse, QuestionEntity questionToReponse){
         this.choix = choix;
-        this.personne = personne;
-        this.question = question;
+        this.personneToReponse = personneToReponse;
+        this.questionToReponse = questionToReponse;
     }
     
     public Long getId() {
@@ -60,11 +62,11 @@ public class ReponseEntity implements Serializable {
     public String getChoix() { return this.choix; }
     public void setChoix(String choix) { this.choix=choix; }
     
-    public Personne getPersonne() { return this.personne; }
-    public void setPersonne(Personne personne) { this.personne=personne; }
+    public PersonneEntity getPersonne() { return this.personneToReponse; }
+    public void setPersonne(PersonneEntity personne) { this.personneToReponse=personne; }
     
-    public Question getQuestion() { return this.question; }
-    public void setQuestion(Question question) { this.question=question; }
+    public QuestionEntity getQuestion() { return this.questionToReponse; }
+    public void setQuestion(QuestionEntity questionToReponse) { this.questionToReponse=questionToReponse; }
 
     @Override
     public int hashCode() {

@@ -5,8 +5,8 @@
  */
 package services;
 
-import dao.Personne;
 import dao.PersonneDAO;
+import dao.PersonneEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class PersonneServiceImpl implements PersonneService {
     PersonneDAO personneDAO;
     
     @Override
-    public Boolean addPersonne(Personne p){
+    public Boolean addPersonne(PersonneEntity p){
         //TODO
         return true;
     }

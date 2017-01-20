@@ -15,12 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author natha_000
  */
 @Entity
+@Table(name="Mur")
 public class MurEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,19 +31,19 @@ public class MurEntity implements Serializable {
     private Long id;
     
     @OneToOne
-    @JoinColumn(name="personne_fk")
-    private Personne personne;
+    @JoinColumn(name="personneToMur_fk")
+    private PersonneEntity personneToMur;
     
-    @ManyToMany(mappedBy="murs")
-    private List<Question> questions;
+    @ManyToMany(mappedBy="mursToQuestions")
+    private List<QuestionEntity> questions;
     
     public MurEntity(){
-        this.personne = new Personne() ;
-        this.questions = new ArrayList<>();
+        /*this.personneToMur = new PersonneEntity() ;
+        this.questions = new ArrayList<>();*/
     } 
     
-    public MurEntity(Personne personne, List<Question> question){
-        this.personne = personne;
+    public MurEntity(PersonneEntity personneToMur, List<QuestionEntity> question){
+        this.personneToMur = personneToMur;
         this.questions = questions;
     }
     
@@ -53,11 +55,11 @@ public class MurEntity implements Serializable {
         this.id = id;
     }
     
-    public Personne getPersonne() { return this.personne; }
-    public void setPersonne(Personne personne) { this.personne=personne; }
+    public PersonneEntity getPersonne() { return this.personneToMur; }
+    public void setPersonne(PersonneEntity personneToMur) { this.personneToMur=personneToMur; }
     
-    public List<Question> getQuestions() { return this.questions; }
-    public void setQuestions(List<Question> questions) { this.questions = questions; }
+    public List<QuestionEntity> getQuestions() { return this.questions; }
+    public void setQuestions(List<QuestionEntity> questions) { this.questions = questions; }
 
     @Override
     public int hashCode() {

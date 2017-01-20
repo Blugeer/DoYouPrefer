@@ -9,15 +9,17 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author natha_000
  */
+@Repository
 public class MurDAOImpl implements MurDAO {
 
-    @PersistenceContext(unitName="MurPU")
+    @PersistenceContext(unitName="DoYouPreferPU")
     private EntityManager em;
     public EntityManager getEm() {
         return em;

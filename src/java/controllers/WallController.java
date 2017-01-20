@@ -21,6 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class WallController {
+    /* Pour connecter un service 
+    @Autowired
+    HelloService helloService ;*/
     
     @RequestMapping(value="wall", method = RequestMethod.GET)
     public String initConnect(){

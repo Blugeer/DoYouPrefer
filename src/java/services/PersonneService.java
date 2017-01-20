@@ -5,12 +5,12 @@
  */
 package services;
 
-import dao.Personne;
+import dao.PersonneEntity;
 
 /**
  *
  * @author natha_000
  */
 public interface PersonneService {
-    public Boolean addPersonne(Personne p);
+    public Boolean addPersonne(PersonneEntity p);
 }

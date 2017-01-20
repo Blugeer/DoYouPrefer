@@ -14,15 +14,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author natha_000
  */
 @Entity
+@Table(name="Question")
 public class QuestionEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,33 +41,38 @@ public class QuestionEntity implements Serializable {
     
     @ManyToOne
     @JoinColumn(name="personneToQuestion_fk")
-    private Personne personne;
+    private PersonneEntity personneToQuestion;
     
     @OneToMany(mappedBy="questionToMessage")
-    private List<Message> messages;
+    private List<MessageEntity> messages;
     
     @OneToMany(mappedBy="questionToReponse")
-    private List<Reponse> reponses;
+    private List<ReponseEntity> reponses;
     
+    @JoinTable(
+            name="Mur_Question",
+            joinColumns=@JoinColumn(name="id_question"),
+            inverseJoinColumns=@JoinColumn(name="id_mur")
+    )
     @ManyToMany
-    private List<Mur> murs;
+    private List<MurEntity> mursToQuestions;
     
     public QuestionEntity(){
-        this.choix1 = "";
+        /*this.choix1 = "";
         this.choix2 = "";
-        this.personne = new Personne();
+        this.personneToQuestion = new PersonneEntity();
         this.messages = new ArrayList<>();
         this.reponses = new ArrayList<>();
-        this.murs = new ArrayList<>();
+        this.mursToQuestions = new ArrayList<>();*/
     }
     
-    public QuestionEntity(String choix1, String choix2, Personne personne, ArrayList<Message> messages, ArrayList<Reponse> reponses, ArrayList<Mur> murs){
+    public QuestionEntity(String choix1, String choix2, PersonneEntity personneToQuestion, ArrayList<MessageEntity> messages, ArrayList<ReponseEntity> reponses, ArrayList<MurEntity> mursToQuestions){
         this.choix1 = choix1;
         this.choix2 = choix2;
-        this.personne = personne;
+        this.personneToQuestion = personneToQuestion;
         this.messages = messages;
         this.reponses = reponses;
-        this.murs = murs;
+        this.mursToQuestions = mursToQuestions;
     }
 
     public Long getId() {
@@ -81,17 +89,17 @@ public class QuestionEntity implements Serializable {
     public String getChoix2() { return this.choix2; }
     public void setChoix2(String choix2) { this.choix2=choix2; }
     
-    public Personne getPersonne() { return this.personne; }
-    public void setPersonne(Personne personne) { this.personne=personne; }
+    public PersonneEntity getPersonne() { return this.personneToQuestion; }
+    public void setPersonne(PersonneEntity personneToQuestion) { this.personneToQuestion=personneToQuestion; }
     
-    public List<Message> getMessages() { return messages; }
-    public void setMessages(List<Message> messages) { this.messages=messages; }
+    public List<MessageEntity> getMessages() { return messages; }
+    public void setMessages(List<MessageEntity> messages) { this.messages=messages; }
     
-    public List<Reponse> getReponses() { return reponses; }
-    public void setReponses(List<Reponse> reponses) { this.reponses=reponses; }
+    public List<ReponseEntity> getReponses() { return reponses; }
+    public void setReponses(List<ReponseEntity> reponses) { this.reponses=reponses; }
     
-    public List<Mur> getMurs() { return murs; }
-    public void setMurs(List<Mur> murs) { this.murs=murs; }
+    public List<MurEntity> getMurs() { return mursToQuestions; }
+    public void setMurs(List<MurEntity> mursToQuestions) { this.mursToQuestions=mursToQuestions; }
 
     @Override
     public int hashCode() {

@@ -13,16 +13,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author natha_000
  */
 @Entity
+@Table(name="Table")
 public class PersonneEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,28 +42,27 @@ public class PersonneEntity implements Serializable {
     @Column
     private String mail;
     
-    @OneToMany(mappedBy="amis")
-    private List<Personne> amis = new ArrayList<Personne>();
+    @ManyToOne
+    private PersonneEntity personneToAmis;
+    
+    @OneToMany(mappedBy="personneToAmis")
+    private List<PersonneEntity> amis;
     
     @OneToMany(mappedBy="personneToQuestion")
-    private List<Question> questions = new ArrayList<Question>();
+    private List<QuestionEntity> questions;
     
     @OneToMany(mappedBy="personneToMessage")
-    private List<Message> messages = new ArrayList<Message>();
+    private List<MessageEntity> messages;
     
     @OneToMany(mappedBy="personneToReponse")
-    private List<Reponse> reponses = new ArrayList<Reponse>();
-    
-    @ManyToOne
-    @JoinColumn(name="amis_fk")
-    private Personne personne;
-    
-    @OneToOne(mappedBy="personne")
-    Mur mur;
+    private List<ReponseEntity> reponses;
+
+    @OneToOne(mappedBy="personneToMur")
+    MurEntity mur;
     
     
     public PersonneEntity(){
-        this.login = "";
+        /*this.login = "";
         this.nom = "";
         this.prenom = "";
         this.mdp = "";
@@ -71,11 +71,11 @@ public class PersonneEntity implements Serializable {
         this.questions = new ArrayList<>();
         this.messages = new ArrayList<>();
         this.reponses = new ArrayList<>();
-        this.personne = new Personne();
-        this.mur = new Mur();
+        this.personneToAmis = new PersonneEntity();
+        this.mur = new MurEntity();*/
     } 
     
-    public PersonneEntity(String login, String nom, String prenom, String mdp, String mail, ArrayList<Personne> amis, ArrayList<Question> questions, ArrayList<Message> messages, ArrayList<Reponse> reponses, Personne personne, Mur mur){
+    public PersonneEntity(String login, String nom, String prenom, String mdp, String mail, ArrayList<PersonneEntity> amis, ArrayList<QuestionEntity> questions, ArrayList<MessageEntity> messages, ArrayList<ReponseEntity> reponses, PersonneEntity personneToAmis, MurEntity mur){
         this.login = login;
         this.nom = nom;
         this.prenom = prenom;
@@ -85,7 +85,7 @@ public class PersonneEntity implements Serializable {
         this.questions = questions;
         this.messages = messages;
         this.reponses = reponses;
-        this.personne = personne;
+        this.personneToAmis = personneToAmis;
         this.mur = mur;
     }
 
@@ -97,20 +97,20 @@ public class PersonneEntity implements Serializable {
         this.id = id;
     }
     
-    public List<Personne> getAmis() { return amis; }
-    public void setAmis(List<Personne> amis) { this.amis=amis; }
+    public List<PersonneEntity> getAmis() { return amis; }
+    public void setAmis(List<PersonneEntity> amis) { this.amis=amis; }
     
-    public List<Question> getQuestions() { return questions; }
-    public void setQuestions(List<Question> questions) { this.questions=questions; }
+    public List<QuestionEntity> getQuestions() { return questions; }
+    public void setQuestions(List<QuestionEntity> questions) { this.questions=questions; }
     
-    public List<Message> getMessages() { return messages; }
-    public void setMessages(List<Message> messages) { this.messages=messages; }
+    public List<MessageEntity> getMessages() { return messages; }
+    public void setMessages(List<MessageEntity> messages) { this.messages=messages; }
     
-    public List<Reponse> getReponses() { return reponses; }
-    public void setReponses(List<Reponse> reponses) { this.reponses=reponses; }
+    public List<ReponseEntity> getReponses() { return reponses; }
+    public void setReponses(List<ReponseEntity> reponses) { this.reponses=reponses; }
     
-    public Mur getMur() { return this.mur; }
-    public void setMur(Mur mur) { this.mur=mur; }
+    public MurEntity getMur() { return this.mur; }
+    public void setMur(MurEntity mur) { this.mur=mur; }
     
     public String getNom() { return this.nom; }
     public void setNom(String nom) { this.nom=nom; }
@@ -127,8 +127,8 @@ public class PersonneEntity implements Serializable {
     public String getMail() { return this.mail; }
     public void setMail(String mail) { this.mail=mail; }
     
-    public Personne getPersonne() { return this.personne; }
-    public void setPersonne(Personne personne) { this.personne=personne; }
+    public PersonneEntity getPersonne() { return this.personneToAmis; }
+    public void setPersonne(PersonneEntity personneToAmis) { this.personneToAmis=personneToAmis; }
 
     @Override
     public int hashCode() {
