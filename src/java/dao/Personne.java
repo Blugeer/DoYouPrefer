@@ -9,6 +9,6 @@ package dao;
  *
  * @author natha_000
  */
-class Personne {
+public class Personne {
     
 }
