@@ -77,8 +77,10 @@ public class WallController {
         else{
             session = request.getSession(false);
             if (request.getParameterMap().containsKey("loginAmi")){
-                // Permet d'ajouter un ami
-                // Il faut cependant vérifier si il n'est pas déjà dans la liste d'amis et si son login existe
+                if(!personneService.addAmi(session.getAttribute("login").toString(), request.getParameter("loginAmi"))){
+                    mv = addErrorMessage("Erreur lors de l'ajout d'ami");
+                    return mv;
+                }
             }
             if (session.getAttribute("login") != null){
                 mv = new ModelAndView("wall");

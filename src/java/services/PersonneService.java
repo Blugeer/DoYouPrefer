@@ -14,4 +14,5 @@ import dao.PersonneEntity;
 public interface PersonneService {
     public Boolean connectionUser(String login, String mdp);
     public Boolean addPersonne(PersonneEntity p);
+    public Boolean addAmi(String login, String loginAmi);
 }
