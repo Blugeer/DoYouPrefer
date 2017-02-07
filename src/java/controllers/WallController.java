@@ -42,8 +42,7 @@ public class WallController {
         String login, nom, prenom, mdp, mail;
         List<String> messages;
         
-        if (request.getParameterMap().containsKey("login")){
-            
+        if (request.getParameterMap().containsKey("login")){ 
             login = request.getParameter("login");
             nom = request.getParameter("nom");
             prenom = request.getParameter("prenom");
@@ -53,24 +52,34 @@ public class WallController {
             if (login != null && login.length() > 0 && mdp != null && mdp.length() > 0){
                 if (nom != null && prenom != null && mail != null && nom.length() > 0 && prenom.length() > 0 && mail.length() > 0){        
                     PersonneEntity p = new PersonneEntity(login, nom, prenom, mdp, mail);
-                    personneService.addPersonne(p);
+                    if (!(personneService.addPersonne(p))){
+                       mv = addErrorMessage("Erreur : cet utilisateur existe déjà"); 
+                       return mv;
+                    }
                 }
                 else if (nom != null && prenom != null && mail != null && (nom.length() == 0 || prenom.length() == 0 || mail.length() == 0)){
-                    mv = addErrorMessage();
+                    mv = addErrorMessage("Erreur lors de l'inscription ou de la connexion");
                     return mv;
                 }
-                
+                else if(!personneService.connectionUser(login, mdp)){
+                    mv = addErrorMessage("Identifiants non valides");
+                    return mv;
+                }
                 mv = new ModelAndView("wall");
                 session = request.getSession(true);
                 session.setAttribute("login", request.getParameter("login"));
             }
             else{
-               mv = addErrorMessage();
+               mv = addErrorMessage("Erreur lors de l'inscription ou de la connexion");
                return mv;
             }
         }
         else{
             session = request.getSession(false);
+            if (request.getParameterMap().containsKey("loginAmi")){
+                // Permet d'ajouter un ami
+                // Il faut cependant vérifier si il n'est pas déjà dans la liste d'amis et si son login existe
+            }
             if (session.getAttribute("login") != null){
                 mv = new ModelAndView("wall");
                 login = (String)session.getAttribute("login");
@@ -90,7 +99,7 @@ public class WallController {
                 session.setAttribute("messages", messages); 
             }
             else{
-                mv = addErrorMessage();
+                mv = addErrorMessage("Erreur lors de l'inscription ou de la connexion");
                 return mv;
             }
         }
@@ -103,9 +112,8 @@ public class WallController {
         return mv;
     }
     
-    private ModelAndView addErrorMessage(){
+    private ModelAndView addErrorMessage(String errorMessage){
         ModelAndView mv = new ModelAndView("error");
-        String errorMessage = "Erreur lors de l'inscription ou de la connexion";
         mv.addObject("errorMessage", errorMessage);
         return mv;
     }

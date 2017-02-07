@@ -24,6 +24,12 @@
         <FORM method="POST" ACTION="createGame.htm">
             <P> <INPUT type=submit value="Créer une question"> </P>
         </FORM>
+        <FORM method="POST" ACTION="wall.htm">
+            <P> 
+                Login de l'ami : <INPUT Type=text Name=loginAmi>
+                <INPUT type=submit value="Ajouter l'ami"> 
+            </P>  
+        </FORM>
         <FORM method="POST" ACTION="index.htm">
             <P> <INPUT type=submit value="Déconnexion"> </P>  
         </FORM>

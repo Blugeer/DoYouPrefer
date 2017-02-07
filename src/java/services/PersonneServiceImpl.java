@@ -22,10 +22,16 @@ public class PersonneServiceImpl implements PersonneService {
     PersonneDAO personneDAO;
     
     @Override
+    public Boolean connectionUser(String login, String mdp) {
+        if (!personneDAO.findByLogin(login).isEmpty()){
+            return (personneDAO.findByLogin(login).get(0).getMdp().equals(mdp));      
+        }
+        return false;
+    }
+    
+    @Override
     public Boolean addPersonne(PersonneEntity p){
-        System.out.println(p.getLogin());
-        if(personneDAO.findByLogin(p.getLogin()).isEmpty()){
-            System.out.println(p.getLogin());
+        if (personneDAO.findByLogin(p.getLogin()).isEmpty() && personneDAO.findByMail(p.getMail()).isEmpty()){
             personneDAO.save(p);
             return true;
         }
