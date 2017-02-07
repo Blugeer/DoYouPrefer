@@ -48,7 +48,9 @@
     <context:annotation-config/>
     <!--Scan des annotations dans les classes du package controller-->
     <context:component-scan base-package="controllers"/>
+    <!--Scan des annotations dans les classes du package dao-->
     <context:component-scan base-package="dao" />
+    <!--Scan des annotations dans les classes du package services-->
     <context:component-scan base-package="services" />
     <!--On laisse Spring interpréter les annotations pour faire le mapping -->
     <mvc:annotation-driven />

@@ -71,22 +71,20 @@ public class PersonneEntity implements Serializable {
         this.questions = new ArrayList<>();
         this.messages = new ArrayList<>();
         this.reponses = new ArrayList<>();
-        this.personneToAmis = new PersonneEntity();
         this.mur = new MurEntity();*/
     } 
     
-    public PersonneEntity(String login, String nom, String prenom, String mdp, String mail, ArrayList<PersonneEntity> amis, ArrayList<QuestionEntity> questions, ArrayList<MessageEntity> messages, ArrayList<ReponseEntity> reponses, PersonneEntity personneToAmis, MurEntity mur){
+    public PersonneEntity(String login, String nom, String prenom, String mdp, String mail){
         this.login = login;
         this.nom = nom;
         this.prenom = prenom;
         this.mdp = mdp;
         this.mail = mail;
-        this.amis = amis;
-        this.questions = questions;
-        this.messages = messages;
-        this.reponses = reponses;
-        this.personneToAmis = personneToAmis;
-        this.mur = mur;
+        this.amis = new ArrayList<>();
+        this.questions = new ArrayList<>();
+        this.messages = new ArrayList<>();
+        this.reponses = new ArrayList<>();
+        this.mur = new MurEntity();
     }
 
     public Long getId() {

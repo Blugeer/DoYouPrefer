@@ -39,22 +39,27 @@ public class WallController {
     {
         HttpSession session;
         ModelAndView mv;
-        String login;
-        String mdp;
+        String login, nom, prenom, mdp, mail;
         List<String> messages;
         
         if (request.getParameterMap().containsKey("login")){
             
             login = request.getParameter("login");
+            nom = request.getParameter("nom");
+            prenom = request.getParameter("prenom");
             mdp = request.getParameter("mdp");
-            if (login != null && login.length() > 0){           
-                PersonneEntity p = new PersonneEntity();
-                p.setLogin(request.getParameter("login"));
-                p.setNom(request.getParameter("nom"));
-                p.setPrenom(request.getParameter("prenom"));
-                p.setMdp(request.getParameter("mdp"));
-                p.setMail(request.getParameter("mail"));
-                personneService.addPersonne(p);
+            mail = request.getParameter("mail");
+            
+            if (login != null && login.length() > 0 && mdp != null && mdp.length() > 0){
+                if (nom != null && prenom != null && mail != null && nom.length() > 0 && prenom.length() > 0 && mail.length() > 0){        
+                    PersonneEntity p = new PersonneEntity(login, nom, prenom, mdp, mail);
+                    personneService.addPersonne(p);
+                }
+                else if (nom != null && prenom != null && mail != null && (nom.length() == 0 || prenom.length() == 0 || mail.length() == 0)){
+                    mv = addErrorMessage();
+                    return mv;
+                }
+                
                 mv = new ModelAndView("wall");
                 session = request.getSession(true);
                 session.setAttribute("login", request.getParameter("login"));
@@ -100,7 +105,7 @@ public class WallController {
     
     private ModelAndView addErrorMessage(){
         ModelAndView mv = new ModelAndView("error");
-        String errorMessage = "Erreur de login";
+        String errorMessage = "Erreur lors de l'inscription ou de la connexion";
         mv.addObject("errorMessage", errorMessage);
         return mv;
     }
