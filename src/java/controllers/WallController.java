@@ -5,15 +5,18 @@
  */
 package controllers;
 
+import dao.PersonneEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import services.PersonneService;
 
 /**
  * @author natha_000
@@ -21,9 +24,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class WallController {
-    /* Pour connecter un service 
+    
     @Autowired
-    HelloService helloService ;*/
+    private PersonneService personneService ;
     
     @RequestMapping(value="wall", method = RequestMethod.GET)
     public String initConnect(){
@@ -39,10 +42,19 @@ public class WallController {
         String login;
         String mdp;
         List<String> messages;
+        
         if (request.getParameterMap().containsKey("login")){
+            
             login = request.getParameter("login");
             mdp = request.getParameter("mdp");
-            if (login != null && login.length() > 0){
+            if (login != null && login.length() > 0){           
+                PersonneEntity p = new PersonneEntity();
+                p.setLogin(request.getParameter("login"));
+                p.setNom(request.getParameter("nom"));
+                p.setPrenom(request.getParameter("prenom"));
+                p.setMdp(request.getParameter("mdp"));
+                p.setMail(request.getParameter("mail"));
+                personneService.addPersonne(p);
                 mv = new ModelAndView("wall");
                 session = request.getSession(true);
                 session.setAttribute("login", request.getParameter("login"));

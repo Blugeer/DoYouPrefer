@@ -56,21 +56,21 @@ public class PersonneDAOImpl implements PersonneDAO {
     @Transactional(readOnly =true)
     @Override
     public List<PersonneEntity> findAll() {
-        Query q = em.createQuery("SELECT personne FROM PersonneEntity personne");
+        Query q = em.createQuery("SELECT p FROM PersonneEntity p");
         return q.getResultList();
     }
     
     @Transactional(readOnly = true)
     @Override
-    public List<PersonneEntity> findByName(String nom) {
-        Query q = em.createQuery("SELECT personne FROM PersonneEntity personne WHERE p.nom = ?").setParameter(1,nom);
+    public List<PersonneEntity> findByName(String name) {
+        Query q = em.createQuery("SELECT p FROM PersonneEntity p WHERE p.nom = :nom").setParameter("nom", name);
         return q.getResultList();
     }
     
     @Transactional(readOnly = true)
     @Override
     public List<PersonneEntity> findByLogin(String login) {
-        Query q = em.createQuery("SELECT personne FROM PersonneEntity personne WHERE p.login = ?").setParameter(1,login);
+        Query q = em.createQuery("SELECT p FROM PersonneEntity p WHERE p.login = :pseudo").setParameter("pseudo", login);
         return q.getResultList();
     }
 }

@@ -5,13 +5,17 @@
  */
 package controllers;
 
+import dao.PersonneEntity;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import services.PersonneService;
 
 /**
  *
@@ -19,9 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class CreateProfileController {
-    /* Pour connecter un service 
-    @Autowired
-    HelloService helloService ;*/
     
     @RequestMapping(value="createProfile", method = RequestMethod.GET)
     public String init(){
@@ -35,7 +36,7 @@ public class CreateProfileController {
         HttpSession session;
         ModelAndView mv;
         session = request.getSession(false);
-        if (session.getAttribute("login") == null){
+        if (session.getAttribute("login") == null){ 
             mv = new ModelAndView("createProfile");
         }
         else{
@@ -44,5 +45,5 @@ public class CreateProfileController {
             mv.addObject("errorMessage", errorMessage);
         }
         return mv; 
-    }    
+    }
 }

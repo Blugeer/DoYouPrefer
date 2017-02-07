@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @author natha_000
  */
 
-@Service("PersonneService")
+@Service
 public class PersonneServiceImpl implements PersonneService {
     
     @Autowired
@@ -23,7 +23,12 @@ public class PersonneServiceImpl implements PersonneService {
     
     @Override
     public Boolean addPersonne(PersonneEntity p){
-        //TODO
-        return true;
+        System.out.println(p.getLogin());
+        if(personneDAO.findByLogin(p.getLogin()).isEmpty()){
+            System.out.println(p.getLogin());
+            personneDAO.save(p);
+            return true;
+        }
+        return false;
     }
 }
