@@ -32,6 +32,7 @@ public class ConnectionController {
         session = request.getSession(false);
         if (session.getAttribute("login") != null){
             session.invalidate();
+            System.out.println("DECONNEXION");
         }
         ModelAndView mv = new ModelAndView("index");
         return mv;

@@ -40,6 +40,7 @@ public class WallController {
         HttpSession session;
         ModelAndView mv;
         String login, nom, prenom, mdp, mail;
+        List<String> amis;
         List<String> messages;
         
         
@@ -77,6 +78,11 @@ public class WallController {
                 mv = new ModelAndView("wall");
                 session = request.getSession(true);
                 session.setAttribute("login", request.getParameter("login"));
+                amis = personneService.getAmisLogin(login);
+                if (amis.isEmpty()){
+                    System.out.println("LA DOUILLE !");
+                }
+                session.setAttribute("amis", amis);
             }
             // Cas où le login et/ou le mdp sont mal renseignés lors d'une inscription/connexion 
             else{
@@ -100,7 +106,8 @@ public class WallController {
             if (session.getAttribute("login") != null){
                 mv = new ModelAndView("wall");
                 login = (String)session.getAttribute("login");
-                // Verify if the session attribute exists
+                amis = personneService.getAmisLogin(login);
+                session.setAttribute("amis", amis);
                 /*if (session.getAttribute("messages") == null){
                     session.setAttribute("messages", personneService.getMessages());
                 }
@@ -125,6 +132,7 @@ public class WallController {
         messages = (ArrayList<String>)session.getAttribute("messages");
         
         mv.addObject("wallMessage", result);
+        mv.addObject("amis", amis);
         mv.addObject("messages", messages);
         return mv;
     }

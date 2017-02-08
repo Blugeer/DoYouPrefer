@@ -46,7 +46,7 @@ public class PersonneServiceImpl implements PersonneService {
             PersonneEntity p = personneDAO.findByLogin(login).get(0);
             PersonneEntity pAmi = personneDAO.findByLogin(loginAmi).get(0);
             List<PersonneEntity> listeAmis = p.getAmis();
-            if (!listeAmis.contains(pAmi)){
+            if (!personneDAO.findByLogin(login).get(0).getAmis().contains(pAmi) && !p.equals(pAmi)){
                 listeAmis.add(pAmi);
                 p.setAmis(listeAmis);
                 personneDAO.update(p);
@@ -60,5 +60,15 @@ public class PersonneServiceImpl implements PersonneService {
     public ArrayList<String> getMessages(String login) {
         //return personneDAO.
         return null;
+    }
+
+    @Override
+    public ArrayList<String> getAmisLogin(String login) {
+        List<PersonneEntity> amisLogin = new ArrayList<>(personneDAO.findByLogin(login).get(0).getAmis());
+        ArrayList<String> amisLoginString = new ArrayList<>();
+        for (int i = 0; i < amisLogin.size(); i++){
+            amisLoginString.add(amisLogin.get(i).getLogin());
+        }
+        return amisLoginString;
     }
 }

@@ -15,6 +15,14 @@
     <body>
         <h2>${wallMessage}</h2>
         
+        <h5>Liste d'amis</h5>
+        
+        <c:forEach items="${amis}" var="friend">
+            <p>
+                ${friend} <br/>
+            </p>
+        </c:forEach>
+        
         <c:forEach items="${messages}" var="current">
             <p>
                 ${current} <br/>

@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -43,12 +45,21 @@ public class PersonneEntity implements Serializable {
     @Column
     private String mail;
     
-    @ManyToOne
-    private PersonneEntity personneToAmis;
+    /*@ManyToOne
+    @JoinColumn(name="personneToAmis_fk")
+    public PersonneEntity personneToAmis;
     
     @OneToMany(mappedBy="personneToAmis")
-    private List<PersonneEntity> amis;
+    private List<PersonneEntity> amis;*/
     
+    @JoinTable(
+        name="personneToAmis_fk",
+        joinColumns=@JoinColumn(name="id_user"),
+        inverseJoinColumns=@JoinColumn(name="id_ami")
+    )
+    @ManyToMany
+    private List<PersonneEntity> amis;
+
     @OneToMany(mappedBy="personneToQuestion")
     private List<QuestionEntity> questions;
     
@@ -125,9 +136,6 @@ public class PersonneEntity implements Serializable {
     
     public String getMail() { return this.mail; }
     public void setMail(String mail) { this.mail=mail; }
-    
-    public PersonneEntity getPersonne() { return this.personneToAmis; }
-    public void setPersonne(PersonneEntity personneToAmis) { this.personneToAmis=personneToAmis; }
 
     @Override
     public int hashCode() {
