@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -62,7 +63,7 @@ public class PersonneEntity implements Serializable {
     
     
     public PersonneEntity(){
-        /*this.login = "";
+        this.login = "";
         this.nom = "";
         this.prenom = "";
         this.mdp = "";
@@ -71,7 +72,7 @@ public class PersonneEntity implements Serializable {
         this.questions = new ArrayList<>();
         this.messages = new ArrayList<>();
         this.reponses = new ArrayList<>();
-        this.mur = new MurEntity();*/
+        this.mur = new MurEntity();
     } 
     
     public PersonneEntity(String login, String nom, String prenom, String mdp, String mail){

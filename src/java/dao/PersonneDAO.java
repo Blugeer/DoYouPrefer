@@ -20,4 +20,5 @@ public interface PersonneDAO {
     public List<PersonneEntity> findByName(String name);
     public List<PersonneEntity> findByLogin(String login);
     public List<PersonneEntity> findByMail(String mail);
+    public List<MessageEntity> getMessages(String login);
 }

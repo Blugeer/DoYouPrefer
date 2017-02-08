@@ -6,6 +6,7 @@
 package services;
 
 import dao.PersonneEntity;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,4 +16,5 @@ public interface PersonneService {
     public Boolean connectionUser(String login, String mdp);
     public Boolean addPersonne(PersonneEntity p);
     public Boolean addAmi(String login, String loginAmi);
+    public ArrayList<String> getMessages(String login);
 }

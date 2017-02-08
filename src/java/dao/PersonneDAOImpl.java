@@ -80,4 +80,11 @@ public class PersonneDAOImpl implements PersonneDAO {
         Query q = em.createQuery("SELECT p FROM PersonneEntity p WHERE p.mail = :mail").setParameter("mail", mail);
         return q.getResultList();
     }
+    
+    @Transactional(readOnly = true)
+    @Override
+    public List<MessageEntity> getMessages(String login) {
+        Query q = em.createQuery("SELECT messages FROM PersonneEntity p WHERE p.login = :login").setParameter("login", login);
+        return q.getResultList();
+    }
 }

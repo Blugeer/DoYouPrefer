@@ -7,6 +7,7 @@ package services;
 
 import dao.PersonneDAO;
 import dao.PersonneEntity;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,11 @@ public class PersonneServiceImpl implements PersonneService {
             }
         }
         return false;
+    }
+
+    @Override
+    public ArrayList<String> getMessages(String login) {
+        //return personneDAO.
+        return null;
     }
 }

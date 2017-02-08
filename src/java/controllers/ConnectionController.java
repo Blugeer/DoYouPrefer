@@ -19,10 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class ConnectionController {
-    /* Pour connecter un service 
-    @Autowired
-    HelloService helloService ;*/
-    
     @RequestMapping(value="index", method = RequestMethod.GET)
     public String initIndex(){
         return "index";
