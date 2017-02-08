@@ -32,14 +32,14 @@
             </P>  
         </FORM>
             
-        <%-- </c:if> --%>
-            
-        <c:forEach items="${messages}" var="current">
+        <c:forEach items="${questions}" var="current">
             <p>
                 ${current} <br/>
             </p>
         </c:forEach>
             
+        <%-- </c:if> --%>
+           
         <FORM method="POST" ACTION="createGame.htm">
             <P> <INPUT type=submit value="Créer une question"> </P>
         </FORM>

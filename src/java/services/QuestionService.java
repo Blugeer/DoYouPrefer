@@ -5,10 +5,12 @@
  */
 package services;
 
+import dao.QuestionEntity;
+
 /**
  *
  * @author natha_000
  */
 public interface QuestionService {
-    
+    public Boolean addQuestion(QuestionEntity q);
 }

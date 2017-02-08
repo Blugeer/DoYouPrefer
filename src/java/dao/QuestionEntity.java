@@ -66,13 +66,13 @@ public class QuestionEntity implements Serializable {
         this.mursToQuestions = new ArrayList<>();*/
     }
     
-    public QuestionEntity(String choix1, String choix2, PersonneEntity personneToQuestion, ArrayList<MessageEntity> messages, ArrayList<ReponseEntity> reponses, ArrayList<MurEntity> mursToQuestions){
+    public QuestionEntity(String choix1, String choix2, PersonneEntity personneToQuestion){
         this.choix1 = choix1;
         this.choix2 = choix2;
         this.personneToQuestion = personneToQuestion;
-        this.messages = messages;
-        this.reponses = reponses;
-        this.mursToQuestions = mursToQuestions;
+        this.messages = new ArrayList<>();
+        this.reponses = new ArrayList<>();
+        this.mursToQuestions = new ArrayList<>();
     }
 
     public Long getId() {
@@ -123,7 +123,7 @@ public class QuestionEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.QuestionEntity[ id=" + id + " ]";
+        return "Tu préfères : " + this.getChoix1() + " ou " + this.getChoix2() + " ?";
     }
     
 }
