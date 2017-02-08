@@ -7,6 +7,8 @@ package services;
 
 import dao.PersonneDAO;
 import dao.PersonneEntity;
+import dao.QuestionDAO;
+import dao.QuestionEntity;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ public class PersonneServiceImpl implements PersonneService {
     
     @Autowired
     PersonneDAO personneDAO;
+    QuestionDAO questionDAO;
     
     @Override
     public Boolean connectionUser(String login, String mdp) {
@@ -70,5 +73,15 @@ public class PersonneServiceImpl implements PersonneService {
             amisLoginString.add(amisLogin.get(i).getLogin());
         }
         return amisLoginString;
+    }
+    
+    @Override
+    public ArrayList<String> getQuestionsLogin(String login) {
+        List<QuestionEntity> questions = new ArrayList<>(personneDAO.findByLogin(login).get(0).getQuestions());
+        ArrayList<String> questionsString = new ArrayList<>();
+        for (int i = 0; i < questions.size(); i++){
+            questionsString.add(questions.get(i).toString());
+        }
+        return questionsString;
     }
 }

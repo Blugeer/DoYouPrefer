@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import services.PersonneService;
+import services.QuestionService;
 
 /**
  * @author natha_000
@@ -27,6 +28,7 @@ public class WallController {
     
     @Autowired
     private PersonneService personneService ;
+    private QuestionService questionService ;
     
     @RequestMapping(value="wall", method = RequestMethod.GET)
     public String initConnect(){
@@ -42,6 +44,7 @@ public class WallController {
         String login, nom, prenom, mdp, mail;
         List<String> amis;
         List<String> messages;
+        List<String> questions = null;
         
         
         // Si le paramètre login existe dans la requêtre POST
@@ -111,15 +114,21 @@ public class WallController {
                 /*if (session.getAttribute("messages") == null){
                     session.setAttribute("messages", personneService.getMessages());
                 }
-                messages = (ArrayList<String>)session.getAttribute("messages");
+                messages = (ArrayList<String>)session.getAttribute("messages");*/
                 if(request.getParameterMap().containsKey("choix1") && request.getParameterMap().containsKey("choix2")){
                     String messageFinal;
                     String choix1 = request.getParameter("choix1");
                     String choix2 = request.getParameter("choix2");
                     messageFinal = "Tu préfères : " + choix1 + " ou " + choix2 + " ?";
-                    messages.add(messageFinal);
+                    if(!questionService.addQuestion(choix1, choix2, ){
+                        mv = addErrorMessage("Erreur lors de l'ajout d'ami");
+                        return mv;
+                    }
+                    questions = personneService.getQuestionsLogin(login);
+                    questions.add(messageFinal);
+                    
                 }
-                session.setAttribute("messages", messages);*/ 
+                session.setAttribute("questions", questions);
             }
             // Sinon message d'erreur
             else{

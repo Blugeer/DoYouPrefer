@@ -38,6 +38,13 @@
                 <INPUT type=submit value="Ajouter l'ami"> 
             </P>  
         </FORM>
+            
+        <c:forEach items="${questions}" var="current">
+            <p>
+                ${current} <br/>
+            </p>
+        </c:forEach>
+            
         <FORM method="POST" ACTION="index.htm">
             <P> <INPUT type=submit value="Déconnexion"> </P>  
         </FORM>
