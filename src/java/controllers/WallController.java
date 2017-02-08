@@ -79,9 +79,6 @@ public class WallController {
                 session = request.getSession(true);
                 session.setAttribute("login", request.getParameter("login"));
                 amis = personneService.getAmisLogin(login);
-                if (amis.isEmpty()){
-                    System.out.println("LA DOUILLE !");
-                }
                 session.setAttribute("amis", amis);
             }
             // Cas où le login et/ou le mdp sont mal renseignés lors d'une inscription/connexion 

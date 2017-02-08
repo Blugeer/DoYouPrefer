@@ -15,29 +15,35 @@
     <body>
         <h2>${wallMessage}</h2>
         
-        <h5>Liste d'amis</h5>
+        <%-- <c:if test="${user}"> --%>
+        
+        <h4>Liste d'amis</h4>
         
         <c:forEach items="${amis}" var="friend">
             <p>
-                ${friend} <br/>
+                <a href='wall.htm'> ${friend} </a> <br/>
             </p>
         </c:forEach>
         
-        <c:forEach items="${messages}" var="current">
-            <p>
-                ${current} <br/>
-            </p>
-        </c:forEach>
-        
-        <FORM method="POST" ACTION="createGame.htm">
-            <P> <INPUT type=submit value="Créer une question"> </P>
-        </FORM>
         <FORM method="POST" ACTION="wall.htm">
             <P> 
                 Login de l'ami : <INPUT Type=text Name=loginAmi>
                 <INPUT type=submit value="Ajouter l'ami"> 
             </P>  
         </FORM>
+            
+        <%-- </c:if> --%>
+            
+        <c:forEach items="${messages}" var="current">
+            <p>
+                ${current} <br/>
+            </p>
+        </c:forEach>
+            
+        <FORM method="POST" ACTION="createGame.htm">
+            <P> <INPUT type=submit value="Créer une question"> </P>
+        </FORM>
+            
         <FORM method="POST" ACTION="index.htm">
             <P> <INPUT type=submit value="Déconnexion"> </P>  
         </FORM>
