@@ -115,17 +115,21 @@ public class WallController {
                 session.setAttribute("amis", amis);
                 
                 questions = personneService.getQuestionsLogin(login);
-                session.setAttribute("questions", personneService.getQuestionsLogin(login));
+                session.setAttribute("questions", questions);
                 if(request.getParameterMap().containsKey("choix1") && request.getParameterMap().containsKey("choix2")){
                     String messageFinal;
                     String choix1 = request.getParameter("choix1");
                     String choix2 = request.getParameter("choix2");
-                    messageFinal = "Tu préfères : " + choix1 + " ou " + choix2 + " ?";
+                    messageFinal = "Tu préfères : " + choix1 + " ou " + choix2 + " ?" + " \"" + login + " \"";
                     QuestionEntity q = new QuestionEntity(choix1, choix2, personneService.getUserByLogin(login));
                     if(!questionService.addQuestion(q)){
                         mv = addErrorMessage("Erreur lors de l'ajout d'ami");
                         return mv;
                     };
+                    /*List<PersonneEntity> listAmis = personneService.getUserByLogin(login).getAmis();
+                    for(int i = 0 ; i<listAmis.size() ; i++){
+                        personneService.getAmisLogin(listAmis.get(i).getLogin());
+                    }*/
                     questions.add(messageFinal); 
                     session.setAttribute("questions", questions);
                 }
