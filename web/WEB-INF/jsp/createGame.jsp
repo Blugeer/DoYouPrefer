@@ -18,5 +18,12 @@
             <P> <INPUT Type=text Name=choix1> ou <INPUT Type=text Name=choix2> ? </P>
             <P> <INPUT Type=submit VALUE="OK"> </P>
 	</FORM> 
+        
+        <h4>Invitez vos amis</h4> 
+        <c:forEach items="${amis}" var="friend">
+            <p>
+                <a href='wall.htm'> ${friend} </a> <br/>
+            </p>
+        </c:forEach>
     </body>
 </html>

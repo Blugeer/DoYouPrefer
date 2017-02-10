@@ -120,7 +120,7 @@ public class WallController {
                     String messageFinal;
                     String choix1 = request.getParameter("choix1");
                     String choix2 = request.getParameter("choix2");
-                    messageFinal = "Tu préfères : " + choix1 + " ou " + choix2 + " ?" + " \"" + login + " \"";
+                    messageFinal = "Tu préfères : " + choix1 + " ou " + choix2 + " ?";
                     QuestionEntity q = new QuestionEntity(choix1, choix2, personneService.getUserByLogin(login));
                     if(!questionService.addQuestion(q)){
                         mv = addErrorMessage("Erreur lors de l'ajout d'ami");

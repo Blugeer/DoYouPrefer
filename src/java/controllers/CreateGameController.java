@@ -5,12 +5,16 @@
  */
 package controllers;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import services.PersonneService;
 
 /**
  *
@@ -18,6 +22,10 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class CreateGameController {
+    
+    @Autowired
+    private PersonneService personneService ;
+        
     @RequestMapping(value="createGame", method = RequestMethod.GET)
     public String init(){
         return "index";
@@ -27,7 +35,11 @@ public class CreateGameController {
     protected ModelAndView handleRequestInternal(
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        ModelAndView mv = new ModelAndView("createGame");
+        
+        String login = request.getParameter("login");
+        ModelAndView mv;
+        List<String> amis = personneService.getAmisLogin(login);
+        mv = new ModelAndView("createGame");
         return mv;
     }
 }
