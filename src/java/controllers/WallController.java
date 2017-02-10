@@ -36,9 +36,25 @@ public class WallController {
     private QuestionService questionService ;
     
     @RequestMapping(value="wall", method = RequestMethod.GET)
-    public String initConnect(@RequestParam(value = "user") String user){
-        System.out.println(user);
-	return "wall";
+    public ModelAndView initConnect(@RequestParam(value = "user") String user, HttpServletRequest request){
+        HttpSession session;
+        session = request.getSession(false);
+        ModelAndView mv = new ModelAndView("wall");
+        if (session.getAttribute("login") != null){
+            String login = session.getAttribute("login").toString();
+            List<PersonneEntity> amis = personneService.getAmisLogin(login);
+            for (int i = 0; i < amis.size(); i++){
+                if (amis.get(i).getLogin().equals(user)){
+                    String result = "Bienvenue sur le mur de " + user;
+                    ArrayList<String> questions = personneService.getQuestionsLogin(user);
+                    System.out.println("Size : " + questions.size());
+                    mv.addObject("user", amis.get(i).getLogin());
+                    mv.addObject("wallMessage", result);
+                    mv.addObject("questions", questions);
+                }
+            }
+        }
+	return mv;
     }
      
     @RequestMapping(value="wall", method = RequestMethod.POST)
@@ -48,7 +64,8 @@ public class WallController {
         HttpSession session;
         ModelAndView mv;
         String login, nom, prenom, mdp, mail;
-        List<String> amis;
+        List<PersonneEntity> amis;
+        List<String> amisString;
         List<String> messages;
         List<String> questions;
         
@@ -88,7 +105,11 @@ public class WallController {
                 session = request.getSession(true);
                 session.setAttribute("login", request.getParameter("login"));
                 amis = personneService.getAmisLogin(login);
-                session.setAttribute("amis", amis);
+                amisString = new ArrayList<>();
+                for (int i = 0; i < amis.size(); i++){
+                    amisString.add(amis.get(i).getLogin());
+                }
+                session.setAttribute("amis", amisString);
                 questions = personneService.getQuestionsLogin(login);
                 session.setAttribute("questions", questions);
             }
@@ -115,7 +136,11 @@ public class WallController {
                 mv = new ModelAndView("wall");
                 login = (String)session.getAttribute("login");
                 amis = personneService.getAmisLogin(login);
-                session.setAttribute("amis", amis);
+                amisString = new ArrayList<>();
+                for (int i = 0; i < amis.size(); i++){
+                    amisString.add(amis.get(i).getLogin());
+                }
+                session.setAttribute("amis", amisString);
                 
                 questions = personneService.getQuestionsLogin(login);
                 session.setAttribute("questions", personneService.getQuestionsLogin(login));
@@ -144,7 +169,8 @@ public class WallController {
         //messages = (ArrayList<String>)session.getAttribute("messages");
         
         mv.addObject("wallMessage", result);
-        mv.addObject("amis", amis);
+        mv.addObject("user", login);
+        mv.addObject("amis", amisString);
         mv.addObject("questions", questions);
         return mv;
     }

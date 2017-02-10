@@ -17,7 +17,7 @@ public interface PersonneService {
     public Boolean addPersonne(PersonneEntity p);
     public Boolean addAmi(String login, String loginAmi);
     public ArrayList<String> getMessages(String login);
-    public ArrayList<String> getAmisLogin(String login);
+    public ArrayList<PersonneEntity> getAmisLogin(String login);
     public ArrayList<String> getQuestionsLogin(String login);
     public PersonneEntity getUserByLogin(String login);
 }

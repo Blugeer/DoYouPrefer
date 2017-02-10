@@ -15,22 +15,26 @@
     <body>
         <h2>${wallMessage}</h2>
         
-        <%-- <c:if test="${user}"> --%>
+        <c:if test="${sessionScope.login == user}">
         
-        <h4>Liste d'amis</h4>
+            <h4>Liste d'amis</h4>
+
+            <c:forEach items="${amis}" var="friend">
+                <p>
+                    <a href='wall.htm?user=${friend}'> ${friend} </a> <br/>
+                </p>
+            </c:forEach> 
         
-        <c:forEach items="${amis}" var="friend">
-            <p>
-                <a href='wall.htm?user=${friend}'> ${friend} </a> <br/>
-            </p>
-        </c:forEach>
-        
-        <FORM method="POST" ACTION="wall.htm">
-            <P> 
-                Login de l'ami : <INPUT Type=text Name=loginAmi>
-                <INPUT type=submit value="Ajouter l'ami"> 
-            </P>  
-        </FORM>
+            <FORM method="POST" ACTION="wall.htm">
+                <P> 
+                    Login de l'ami : <INPUT Type=text Name=loginAmi>
+                    <INPUT type=submit value="Ajouter l'ami"> 
+                </P>  
+            </FORM>
+                
+        </c:if>
+          
+        <h4>Liste de questions</h4>
             
         <c:forEach items="${questions}" var="current">
             <FORM method="POST" ACTION="wall.htm">
@@ -39,12 +43,14 @@
                 </P>  
             </FORM>   
         </c:forEach>
-            
-        <%-- </c:if> --%>
-           
-        <FORM method="POST" ACTION="createGame.htm">
-            <P> <INPUT type=submit value="Créer une question"> </P>
-        </FORM>
+                
+         <c:if test="${sessionScope.login == user}">
+        
+            <FORM method="POST" ACTION="createGame.htm">
+                <P> <INPUT type=submit value="Créer une question"> </P>
+            </FORM>
+             
+        </c:if>
             
         <FORM method="POST" ACTION="index.htm">
             <P> <INPUT type=submit value="Déconnexion"> </P>  
