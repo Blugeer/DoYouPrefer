@@ -5,6 +5,8 @@
  */
 package controllers;
 
+import dao.PersonneEntity;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import services.PersonneService;
 
@@ -36,10 +39,40 @@ public class CreateGameController {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         
-        String login = request.getParameter("login");
-        ModelAndView mv;
-        List<String> amis = personneService.getAmisLogin(login);
-        mv = new ModelAndView("createGame");
+        HttpSession session;
+        session = request.getSession(true);
+        ModelAndView mv = new ModelAndView("createGame");;
+        //if (request.getParameterMap().containsKey("amis")){ 
+            String amis = "zouz";
+            //ArrayList<PersonneEntity> amis = personneService.getAmisLogin(login);
+            //ArrayList<String> amisString = new ArrayList<>();
+            /*for (int i = 0; i < amis.size(); i++){
+                amisString.add(amis.get(i).getLogin());
+            }*/
+            mv.addObject("amis", amis);
+            //mv.addObject("amis", amisString);
+        //}
         return mv;
+    }
+    
+    public ModelAndView initConnect(@RequestParam(value = "user") String user, HttpServletRequest request){
+        HttpSession session;
+        session = request.getSession(false);
+        ModelAndView mv = new ModelAndView("wall");
+        if (session.getAttribute("login") != null){
+            String login = session.getAttribute("login").toString();
+            List<PersonneEntity> amis = personneService.getAmisLogin(login);
+            for (int i = 0; i < amis.size(); i++){
+                if (amis.get(i).getLogin().equals(user)){
+                    String result = "Bienvenue sur le mur de " + user;
+                    ArrayList<String> questions = personneService.getQuestionsLogin(user);
+                    System.out.println("Size : " + questions.size());
+                    mv.addObject("amis", amis.get(i).getLogin());
+                    mv.addObject("wallMessage", result);
+                    mv.addObject("questions", questions);
+                }
+            }
+        }
+	return mv;
     }
 }

@@ -48,7 +48,7 @@ public class WallController {
                     String result = "Bienvenue sur le mur de " + user;
                     ArrayList<String> questions = personneService.getQuestionsLogin(user);
                     System.out.println("Size : " + questions.size());
-                    mv.addObject("user", amis.get(i).getLogin());
+                    mv.addObject("amis", amis.get(i).getLogin());
                     mv.addObject("wallMessage", result);
                     mv.addObject("questions", questions);
                 }
@@ -153,7 +153,7 @@ public class WallController {
                     if(!questionService.addQuestion(q)){
                         mv = addErrorMessage("Erreur lors de l'ajout d'ami");
                         return mv;
-                    };
+                    }
                     /*List<PersonneEntity> listAmis = personneService.getUserByLogin(login).getAmis();
                     for(int i = 0 ; i<listAmis.size() ; i++){
                         personneService.getAmisLogin(listAmis.get(i).getLogin());
@@ -176,6 +176,7 @@ public class WallController {
         mv.addObject("user", login);
         mv.addObject("amis", amisString);
         mv.addObject("questions", questions);
+        mv.addObject("login", login);
         return mv;
     }
     
