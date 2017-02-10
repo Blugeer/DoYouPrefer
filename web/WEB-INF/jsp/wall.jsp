@@ -21,7 +21,7 @@
         
         <c:forEach items="${amis}" var="friend">
             <p>
-                <a href='wall.htm'> ${friend} </a> <br/>
+                <a href='wall.htm?user=${friend}'> ${friend} </a> <br/>
             </p>
         </c:forEach>
         
@@ -33,9 +33,11 @@
         </FORM>
             
         <c:forEach items="${questions}" var="current">
-            <p>
-                ${current} <br/>
-            </p>
+            <FORM method="POST" ACTION="wall.htm">
+                <P> 
+                    ${current} <INPUT type=submit value="Choix1"> <INPUT type=submit value="Choix2"> <br/>
+                </P>  
+            </FORM>   
         </c:forEach>
             
         <%-- </c:if> --%>

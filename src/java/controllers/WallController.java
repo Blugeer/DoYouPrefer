@@ -14,8 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import services.PersonneService;
 import services.QuestionService;
@@ -34,8 +36,9 @@ public class WallController {
     private QuestionService questionService ;
     
     @RequestMapping(value="wall", method = RequestMethod.GET)
-    public String initConnect(){
-	return "index";
+    public String initConnect(@RequestParam(value = "user") String user){
+        System.out.println(user);
+	return "wall";
     }
      
     @RequestMapping(value="wall", method = RequestMethod.POST)
@@ -87,7 +90,7 @@ public class WallController {
                 amis = personneService.getAmisLogin(login);
                 session.setAttribute("amis", amis);
                 questions = personneService.getQuestionsLogin(login);
-                session.setAttribute("questions", personneService.getQuestionsLogin(login));
+                session.setAttribute("questions", questions);
             }
             // Cas où le login et/ou le mdp sont mal renseignés lors d'une inscription/connexion 
             else{
@@ -138,11 +141,11 @@ public class WallController {
         }
         
         String result = "Bienvenue sur ton mur " + login;
-        messages = (ArrayList<String>)session.getAttribute("messages");
+        //messages = (ArrayList<String>)session.getAttribute("messages");
         
         mv.addObject("wallMessage", result);
         mv.addObject("amis", amis);
-        mv.addObject("messages", messages);
+        mv.addObject("questions", questions);
         return mv;
     }
     
