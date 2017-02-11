@@ -7,6 +7,7 @@ package services;
 
 import dao.PersonneEntity;
 import dao.QuestionEntity;
+import dao.MessageEntity;
 import java.util.ArrayList;
 
 /**

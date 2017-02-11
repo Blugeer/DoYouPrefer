@@ -49,4 +49,5 @@ class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
     
+
 </beans>

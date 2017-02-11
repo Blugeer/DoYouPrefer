@@ -5,7 +5,6 @@
  */
 package services;
 
-import dao.MessageEntity;
 import dao.QuestionEntity;
 import java.util.ArrayList;
 

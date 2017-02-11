@@ -8,11 +8,13 @@ package services;
 import dao.MessageDAO;
 import dao.MessageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author natha_000
  */
+@Service
 public class MessageServiceImpl implements MessageService {
           
     @Autowired

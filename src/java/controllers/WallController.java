@@ -79,7 +79,7 @@ public class WallController {
         List<String> amisString;
         List<String> messages;
         List<String> questions;
-        ArrayList<ArrayList<String>> commentaires = null;
+        String message;
         
         
         // Si le paramètre login existe dans la requêtre POST
@@ -90,6 +90,7 @@ public class WallController {
             prenom = request.getParameter("prenom");
             mdp = request.getParameter("mdp");
             mail = request.getParameter("mail");
+
             
             // Cas où le login et le mdp sont renseignés
             if (login != null && login.length() > 0 && mdp != null && mdp.length() > 0){
@@ -166,23 +167,18 @@ public class WallController {
                         mv = addErrorMessage("Erreur lors de l'ajout d'ami");
                         return mv;
                     }
-                    /*List<PersonneEntity> listAmis = personneService.getUserByLogin(login).getAmis();
-                    for(int i = 0 ; i<listAmis.size() ; i++){
-                        personneService.getAmisLogin(listAmis.get(i).getLogin());
-                    }*/
                     questions.add(messageFinal); 
                     session.setAttribute("questions", questions);
                 }
                 
-                if(request.getParameterMap().containsKey("Envoyer")){
-                    String message = request.getParameter("message");
+                if(request.getParameterMap().containsKey("message")){
+                    message = request.getParameter("message");
                     MessageEntity m = new MessageEntity(message, personneService.getUserByLogin(login), personneService.getQuestionsEntityLogin(login).get(0));
                     if(!messageService.addMessage(m)){
                         mv = addErrorMessage("Erreur lors de l'ajout de commentaire");
                         return mv;
                     }
-                    commentaires.get(0).add(message); 
-                    session.setAttribute("messages", commentaires);
+                    session.setAttribute("message", message);
                 }
             }
             // Sinon message d'erreur
@@ -200,6 +196,7 @@ public class WallController {
         mv.addObject("amis", amisString);
         mv.addObject("questions", questions);
         mv.addObject("messages", messages);
+        mv.addObject("message", message);
         mv.addObject("login", login);
         return mv;
     }
