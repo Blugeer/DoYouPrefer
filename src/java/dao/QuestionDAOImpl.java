@@ -59,4 +59,10 @@ public class QuestionDAOImpl implements QuestionDAO {
         Query q = em.createQuery("SELECT question FROM QuestionEntity question");
         return q.getResultList();
     }
+
+    @Override
+    public List<QuestionEntity> findByMur(Long id) {
+        Query q = em.createQuery("SELECT question FROM QuestionEntity question LEFT JOIN question.murs m WHERE m.id = :id").setParameter("id", id);
+        return q.getResultList();
+    }
 }

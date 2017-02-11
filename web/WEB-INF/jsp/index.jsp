@@ -29,7 +29,7 @@
                 background-color: #474e5d; /* Dark Blue */
                 color: #555555;
             }
-            .input{
+            .filltext{
                 color: #555555;
             }
         </style>
@@ -40,8 +40,8 @@
         <div class="container-fluid bg-1 text-center">
             <h2> Connexion </h2> <br/>
             <FORM method="POST" ACTION="wall.htm">
-                <P> Entrez votre login : <INPUT Type=text Name=login class="input"> </P> <br/>
-                <P> Entrez votre mot de passe : <INPUT Type=password Name=mdp class="input"></P> <br/>
+                <P> Entrez votre login : <INPUT Type=text Name=login class="filltext"> </P> <br/>
+                <P> Entrez votre mot de passe : <INPUT Type=password Name=mdp class="filltext"></P> <br/>
                 <P> <INPUT Type=submit VALUE="OK" class="btn btn-default btn-lg"> </P> <br/>
             </FORM>
         </div>

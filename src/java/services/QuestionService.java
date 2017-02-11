@@ -6,6 +6,7 @@
 package services;
 
 import dao.QuestionEntity;
+import dao.ReponseEntity;
 
 /**
  *
@@ -13,4 +14,5 @@ import dao.QuestionEntity;
  */
 public interface QuestionService {
     public Boolean addQuestion(QuestionEntity q);
+    public Boolean addReponse(ReponseEntity r);
 }

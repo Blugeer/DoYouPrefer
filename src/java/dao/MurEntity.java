@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,18 +30,15 @@ public class MurEntity implements Serializable {
     private Long id;
     
     @OneToOne
-    @JoinColumn(name="personneToMur_fk")
     private PersonneEntity personneToMur;
     
-    @ManyToMany(mappedBy="mursToQuestions")
+    @ManyToMany(mappedBy="murs")
     private List<QuestionEntity> questions;
     
     public MurEntity(){
-        /*this.personneToMur = new PersonneEntity() ;
-        this.questions = new ArrayList<>();*/
     } 
     
-    public MurEntity(PersonneEntity personneToMur, List<QuestionEntity> question){
+    public MurEntity(PersonneEntity personneToMur, ArrayList<QuestionEntity> questions){
         this.personneToMur = personneToMur;
         this.questions = questions;
     }

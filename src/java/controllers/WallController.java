@@ -5,8 +5,10 @@
  */
 package controllers;
 
+import dao.MurEntity;
 import dao.PersonneEntity;
 import dao.QuestionEntity;
+import dao.ReponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,8 +38,10 @@ public class WallController {
     
     @RequestMapping(value="wall", method = RequestMethod.GET)
     public ModelAndView initConnect(@RequestParam(value = "user") String user, HttpServletRequest request){
+        /* Quand on visite la page d'un ami */
         HttpSession session;
         session = request.getSession(false);
+        List<QuestionEntity> questions;
         ModelAndView mv = new ModelAndView("wall");
         if (session.getAttribute("login") != null){
             String login = session.getAttribute("login").toString();
@@ -46,8 +49,7 @@ public class WallController {
             for (int i = 0; i < amis.size(); i++){
                 if (amis.get(i).getLogin().equals(user)){
                     String result = "Bienvenue sur le mur de " + user;
-                    ArrayList<String> questions = personneService.getQuestionsLogin(user);
-                    System.out.println("Size : " + questions.size());
+                    questions = personneService.getQuestionsLogin(user);
                     mv.addObject("user", amis.get(i).getLogin());
                     mv.addObject("wallMessage", result);
                     mv.addObject("questions", questions);
@@ -66,11 +68,10 @@ public class WallController {
         String login, nom, prenom, mdp, mail;
         List<PersonneEntity> amis;
         List<String> amisString;
-        List<String> messages;
-        List<String> questions;
+        List<QuestionEntity> questions;
         
         
-        // Si le paramètre login existe dans la requêtre POST
+        // Si le paramètre login existe dans la requêtre POST (connexion ou création de compte)
         if (request.getParameterMap().containsKey("login")){ 
             // On récupère les différents paramètres de requête
             login = request.getParameter("login");
@@ -142,21 +143,36 @@ public class WallController {
                 }
                 session.setAttribute("amis", amisString);
                 
+                if(request.getParameterMap().containsKey("answer1") || request.getParameterMap().containsKey("answer2")){
+                    if (request.getParameterMap().containsKey("answer1") && request.getParameterMap().containsKey("question")){
+                        int index = Integer.parseInt(request.getParameter("question"));
+                        ReponseEntity r = new ReponseEntity(login, personneService.getUserByLogin(login), personneService.getQuestionsLogin(login).get(index));
+                        r.setChoix(personneService.getQuestionsLogin(login).get(index).getChoix1());
+                        questionService.addReponse(r);
+                    }
+                    if (request.getParameterMap().containsKey("answer2") && request.getParameterMap().containsKey("question")){
+                        int index = Integer.parseInt(request.getParameter("question"));
+                        ReponseEntity r = new ReponseEntity(login, personneService.getUserByLogin(login), personneService.getQuestionsLogin(login).get(index));
+                        r.setChoix(personneService.getQuestionsLogin(login).get(index).getChoix2());
+                        questionService.addReponse(r);
+                    }
+                }    
+                
                 questions = personneService.getQuestionsLogin(login);
-                session.setAttribute("questions", personneService.getQuestionsLogin(login));
+                session.setAttribute("questions", questions);
                 if(request.getParameterMap().containsKey("choix1") && request.getParameterMap().containsKey("choix2")){
-                    String messageFinal;
                     String choix1 = request.getParameter("choix1");
                     String choix2 = request.getParameter("choix2");
-                    messageFinal = "Tu préfères : " + choix1 + " ou " + choix2 + " ?";
-                    QuestionEntity q = new QuestionEntity(choix1, choix2, personneService.getUserByLogin(login));
+                    ArrayList<MurEntity> murs = new ArrayList<>();
+                    murs.add(personneService.getUserByLogin(login).getMur());
+                    QuestionEntity q = new QuestionEntity(choix1, choix2, murs);
                     if(!questionService.addQuestion(q)){
-                        mv = addErrorMessage("Erreur lors de l'ajout d'ami");
+                        mv = addErrorMessage("Erreur lors de l'ajout de question");
                         return mv;
-                    };
-                    questions.add(messageFinal); 
+                    }
+                    questions.add(q);
                     session.setAttribute("questions", questions);
-                }
+                }            
             }
             // Sinon message d'erreur
             else{

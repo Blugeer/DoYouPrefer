@@ -57,7 +57,9 @@
             .navbar-nav li a:hover {
                 color: #1abc9c !important;
             }
-            
+            .filltext{
+                color: #555555;
+            }       
         </style>
     </head>
     <body>
@@ -107,7 +109,7 @@
 
                 <FORM method="POST" ACTION="wall.htm">
                     <P> 
-                        Login de l'ami : <INPUT Type=text Name=loginAmi>
+                        Login de l'ami : <INPUT Type=text Name=loginAmi class="filltext">
                         <INPUT type=submit value="Ajouter l'ami" class="btn btn-default btn-lg input"> 
                     </P>  
                 </FORM>
@@ -116,13 +118,25 @@
             <div class="container-fluid bg-2 text-center login">
                 <h4>Liste de questions</h4>
 
-                <c:forEach items="${questions}" var="current">
+                <c:forEach items="${questions}" var="current" varStatus="ind">
                     <FORM method="POST" ACTION="wall.htm">
                         <P> 
-                            ${current} 
-                            <INPUT type=submit value="Choix1" class="btn btn-default btn-lg input"> 
-                            <INPUT type=submit value="Choix2" class="btn btn-default btn-lg input"> 
-                            <br/>
+                            ${current.toString()}
+                            <c:set var="foundUser" value="false"/>
+                            <c:forEach items="${current.getReponses()}" var="reponses">
+                                <c:if test="${reponses.getPersonne().getLogin() == user}">
+                                    <c:set var="foundUser" value="true"/>
+                                </c:if>
+                            </c:forEach>
+                            <c:if test="${foundUser eq 'false'}">
+                                <INPUT type="hidden" name="question" value=${ind.index}>
+                                <INPUT type=submit name ="answer1" value="Choix 1" class="btn btn-default btn-lg input"> 
+                                <INPUT type=submit name ="answer2" value="Choix 2" class="btn btn-default btn-lg input"> 
+                                <br/>
+                            </c:if>
+                            <c:if test="${foundUser eq 'true'}">
+                                Vous avez déjà répondu à cette question <br/>
+                            </c:if>
                         </P>  
                     </FORM>   
                 </c:forEach>
@@ -133,13 +147,25 @@
             <div class="container-fluid bg-2 text-center otheruser">
                 <h4>Liste de questions</h4>
 
-                <c:forEach items="${questions}" var="current">
+                <c:forEach items="${questions}" var="current" varStatus="ind">
                     <FORM method="POST" ACTION="wall.htm">
                         <P> 
-                            ${current} 
-                            <INPUT type=submit value="Choix1" class="btn btn-default btn-lg input"> 
-                            <INPUT type=submit value="Choix2" class="btn btn-default btn-lg input"> 
-                            <br/>
+                            ${current.toString()}
+                            <c:set var="foundUser" value="false"/>
+                            <c:forEach items="${current.getReponses()}" var="reponses">
+                                <c:if test="${reponses.getPersonne().getLogin() == user}">
+                                    <c:set var="foundUser" value="true"/>
+                                </c:if>
+                            </c:forEach>
+                            <c:if test="${foundUser eq false}">
+                                <INPUT type="hidden" name="question" value=${ind.index}>
+                                <INPUT type=submit name ="answer1" value="Choix 1" class="btn btn-default btn-lg input"> 
+                                <INPUT type=submit name ="answer2" value="Choix 2" class="btn btn-default btn-lg input"> 
+                                <br/>
+                            </c:if>
+                            <c:if test="${foundUser eq true}">
+                                Vous avez déjà répondu à cette question <br/>
+                            </c:if>
                         </P>  
                     </FORM>   
                 </c:forEach>

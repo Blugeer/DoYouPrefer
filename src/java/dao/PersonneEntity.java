@@ -43,14 +43,7 @@ public class PersonneEntity implements Serializable {
     private String mdp;
     @Column
     private String mail;
-    
-    /*@ManyToOne
-    @JoinColumn(name="personneToAmis_fk")
-    public PersonneEntity personneToAmis;
-    
-    @OneToMany(mappedBy="personneToAmis")
-    private List<PersonneEntity> amis;*/
-    
+ 
     @JoinTable(
         name="personneToAmis_fk",
         joinColumns=@JoinColumn(name="id_user"),
@@ -58,9 +51,6 @@ public class PersonneEntity implements Serializable {
     )
     @ManyToMany
     private List<PersonneEntity> amis;
-
-    @OneToMany(mappedBy="personneToQuestion")
-    private List<QuestionEntity> questions;
     
     @OneToMany(mappedBy="personneToMessage")
     private List<MessageEntity> messages;
@@ -73,16 +63,6 @@ public class PersonneEntity implements Serializable {
     
     
     public PersonneEntity(){
-        this.login = "";
-        this.nom = "";
-        this.prenom = "";
-        this.mdp = "";
-        this.mail = "";
-        this.amis = new ArrayList<>();
-        this.questions = new ArrayList<>();
-        this.messages = new ArrayList<>();
-        this.reponses = new ArrayList<>();
-        this.mur = new MurEntity();
     } 
     
     public PersonneEntity(String login, String nom, String prenom, String mdp, String mail){
@@ -92,10 +72,9 @@ public class PersonneEntity implements Serializable {
         this.mdp = mdp;
         this.mail = mail;
         this.amis = new ArrayList<>();
-        this.questions = new ArrayList<>();
         this.messages = new ArrayList<>();
         this.reponses = new ArrayList<>();
-        this.mur = new MurEntity();
+        this.mur = new MurEntity(this, new ArrayList<>());
     }
 
     public Long getId() {
@@ -108,9 +87,6 @@ public class PersonneEntity implements Serializable {
     
     public List<PersonneEntity> getAmis() { return amis; }
     public void setAmis(List<PersonneEntity> amis) { this.amis=amis; }
-    
-    public List<QuestionEntity> getQuestions() { return questions; }
-    public void setQuestions(List<QuestionEntity> questions) { this.questions=questions; }
     
     public List<MessageEntity> getMessages() { return messages; }
     public void setMessages(List<MessageEntity> messages) { this.messages=messages; }

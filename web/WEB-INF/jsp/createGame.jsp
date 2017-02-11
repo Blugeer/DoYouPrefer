@@ -55,6 +55,9 @@
             .navbar-nav li a:hover {
                 color: #1abc9c !important;
             }
+            .filltext{
+                color: #555555;
+            }
         </style>
     </head>
     <body>
@@ -90,9 +93,21 @@
             <h1>Créez votre "Tu préfères"</h1>
         </div>
         <div class="container-fluid bg-2 text-center">
+            <FORM method="POST" ACTION="createGame.htm" class="form">
+                <h4> Ajouter des amis a la future question</h4>
+                <P> 
+                    Login de l'ami : <INPUT Type=text Name=loginParticipant class="filltext"> 
+                    <INPUT Type=submit VALUE="Ajouter" class="btn btn-default btn-lg"> 
+                </P>
+                <c:forEach items="${participants}" var="part">
+                    <p>
+                        ${part} <br/>
+                    </p>
+                </c:forEach>
+            </FORM> 
             <FORM method="POST" ACTION="wall.htm" class="form">
                 <P> Tu préfères :</P>
-                <P> <INPUT Type=text Name=choix1> ou <INPUT Type=text Name=choix2> ? </P>
+                <P> <INPUT Type=text Name=choix1 class="filltext"> ou <INPUT Type=text Name=choix2 class="filltext"> ? </P>
                 <P> <INPUT Type=submit VALUE="OK" class="btn btn-default btn-lg"> </P>
             </FORM> 
         </div>

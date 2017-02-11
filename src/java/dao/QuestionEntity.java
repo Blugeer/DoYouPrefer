@@ -39,10 +39,6 @@ public class QuestionEntity implements Serializable {
     @Column
     private String choix2;
     
-    @ManyToOne
-    @JoinColumn(name="personneToQuestion_fk")
-    private PersonneEntity personneToQuestion;
-    
     @OneToMany(mappedBy="questionToMessage")
     private List<MessageEntity> messages;
     
@@ -50,29 +46,22 @@ public class QuestionEntity implements Serializable {
     private List<ReponseEntity> reponses;
     
     @JoinTable(
-            name="Mur_Question",
+            name="mursToQuestions_fk",
             joinColumns=@JoinColumn(name="id_question"),
             inverseJoinColumns=@JoinColumn(name="id_mur")
     )
     @ManyToMany
-    private List<MurEntity> mursToQuestions;
+    private List<MurEntity> murs;
     
     public QuestionEntity(){
-        /*this.choix1 = "";
-        this.choix2 = "";
-        this.personneToQuestion = new PersonneEntity();
-        this.messages = new ArrayList<>();
-        this.reponses = new ArrayList<>();
-        this.mursToQuestions = new ArrayList<>();*/
     }
     
-    public QuestionEntity(String choix1, String choix2, PersonneEntity personneToQuestion){
+    public QuestionEntity(String choix1, String choix2, ArrayList<MurEntity> murs){
         this.choix1 = choix1;
         this.choix2 = choix2;
-        this.personneToQuestion = personneToQuestion;
         this.messages = new ArrayList<>();
         this.reponses = new ArrayList<>();
-        this.mursToQuestions = new ArrayList<>();
+        this.murs = murs;
     }
 
     public Long getId() {
@@ -89,17 +78,14 @@ public class QuestionEntity implements Serializable {
     public String getChoix2() { return this.choix2; }
     public void setChoix2(String choix2) { this.choix2=choix2; }
     
-    public PersonneEntity getPersonne() { return this.personneToQuestion; }
-    public void setPersonne(PersonneEntity personneToQuestion) { this.personneToQuestion=personneToQuestion; }
-    
     public List<MessageEntity> getMessages() { return messages; }
     public void setMessages(List<MessageEntity> messages) { this.messages=messages; }
     
     public List<ReponseEntity> getReponses() { return reponses; }
     public void setReponses(List<ReponseEntity> reponses) { this.reponses=reponses; }
     
-    public List<MurEntity> getMurs() { return mursToQuestions; }
-    public void setMurs(List<MurEntity> mursToQuestions) { this.mursToQuestions=mursToQuestions; }
+    public List<MurEntity> getMurs() { return murs; }
+    public void setMurs(List<MurEntity> murs) { this.murs=murs; }
 
     @Override
     public int hashCode() {
