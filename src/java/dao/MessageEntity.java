@@ -40,9 +40,6 @@ public class MessageEntity implements Serializable {
     private QuestionEntity questionToMessage;
     
     public MessageEntity(){
-        /*this.contenu= "" ;
-        this.personneToMessage= new PersonneEntity();
-        this.questionToMessage = new QuestionEntity();*/
     } 
     
     public MessageEntity(String contenu, PersonneEntity personne, QuestionEntity question){

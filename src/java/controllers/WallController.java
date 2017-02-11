@@ -143,6 +143,9 @@ public class WallController {
                 }
                 session.setAttribute("amis", amisString);
                 
+                /**
+                 * Si l'on observe qu'une réponse a été sélectionnée
+                 */
                 if(request.getParameterMap().containsKey("answer1") || request.getParameterMap().containsKey("answer2")){
                     if (request.getParameterMap().containsKey("answer1") && request.getParameterMap().containsKey("question")){
                         int index = Integer.parseInt(request.getParameter("question"));
@@ -158,6 +161,9 @@ public class WallController {
                     }
                 }    
                 
+                /**
+                 * Si une question a été créé, ainsi que la liste des participants qui va avec
+                 */
                 questions = personneService.getQuestionsLogin(login);
                 session.setAttribute("questions", questions);
                 if(request.getParameterMap().containsKey("choix1") && request.getParameterMap().containsKey("choix2")){
@@ -165,6 +171,14 @@ public class WallController {
                     String choix2 = request.getParameter("choix2");
                     ArrayList<MurEntity> murs = new ArrayList<>();
                     murs.add(personneService.getUserByLogin(login).getMur());
+                    if (session.getAttribute("participants") != null){
+                        ArrayList<PersonneEntity> participants = (ArrayList<PersonneEntity>)session.getAttribute("participants");
+                        System.out.println(participants.size());
+                        for (int i = 0; i < participants.size(); i++){
+                            murs.add(personneService.getUserByLogin(participants.get(i).getLogin()).getMur());
+                        }
+                        session.setAttribute("participants", new ArrayList<>());
+                    }
                     QuestionEntity q = new QuestionEntity(choix1, choix2, murs);
                     if(!questionService.addQuestion(q)){
                         mv = addErrorMessage("Erreur lors de l'ajout de question");

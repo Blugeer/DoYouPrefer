@@ -69,8 +69,12 @@ public class PersonneServiceImpl implements PersonneService {
 
     @Override
     public ArrayList<PersonneEntity> getAmisLogin(String login) {
-        ArrayList<PersonneEntity> amisLogin = new ArrayList<>(personneDAO.findByLogin(login).get(0).getAmis());
-        return amisLogin;
+        if (personneDAO.findByLogin(login).get(0).getAmis().size() > 0){
+            return new ArrayList<>(personneDAO.findByLogin(login).get(0).getAmis());
+        }
+        else{
+            return new ArrayList<>();
+        }
     }
     
     @Override

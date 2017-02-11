@@ -15,11 +15,18 @@ import java.util.List;
  * @author natha_000
  */
 public interface PersonneService {
+    // Fonction vérifiant la présence d'un utilisateur dans le BD
     public Boolean connectionUser(String login, String mdp);
+    // Fonction permettant l'ajout d'un profil dans la BD
     public Boolean addPersonne(PersonneEntity p);
+    // Fonction permettant l'ajout d'un ami dans la BD
     public Boolean addAmi(String login, String loginAmi);
+    // Fonction récupérant les messages pour un login donné
     public ArrayList<String> getMessages(String login);
+    // Fonction récupérant les amis pour un login donné
     public ArrayList<PersonneEntity> getAmisLogin(String login);
+    // Fonction récupérant les questiones pour un login donné
     public List<QuestionEntity> getQuestionsLogin(String login);
+    // Fonction récupérant l'objet Personne grâce à un login donné
     public PersonneEntity getUserByLogin(String login);
 }
