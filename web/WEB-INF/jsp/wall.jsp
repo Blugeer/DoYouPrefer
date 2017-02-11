@@ -124,6 +124,9 @@
                             <INPUT type=submit value="Choix2" class="btn btn-default btn-lg input"> 
                             <br/>
                         </P> 
+                        <c:forEach items="${message}" var="current_message">
+                            <P> ${current_message} </P>
+                        </c:forEach>
                         <P>
                             <INPUT Type=text Name=message>
                             <INPUT Type=submit VALUE="Envoyer" class="btn btn-default btn-lg">
@@ -145,7 +148,7 @@
                             <INPUT type=submit value="Choix2" class="btn btn-default btn-lg input"> 
                             <br/>
                         </P>
-                        <c:forEach items="${messages}" var="current_message">
+                        <c:forEach items="${message}" var="current_message">
                             <P> ${current} </P>
                         </c:forEach>
                         <P>

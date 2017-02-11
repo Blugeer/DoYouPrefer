@@ -53,15 +53,15 @@ public class WallController {
                     String result = "Bienvenue sur le mur de " + user;
                     ArrayList<String> questions = personneService.getQuestionsLogin(user);
                     ArrayList<QuestionEntity> questionsEntity = personneService.getQuestionsEntityLogin(user);
-                    ArrayList<ArrayList<String>> messages = new ArrayList<>();
+                    ArrayList<ArrayList<String>> message = new ArrayList<>();
                     for (int j = 0; j < questionsEntity.size(); j++){
-                        messages.add(questionService.getMessages(questionsEntity.get(j).getChoix1(), questionsEntity.get(j).getChoix2()));
+                        message.add(questionService.getMessages(questionsEntity.get(j).getChoix1(), questionsEntity.get(j).getChoix2()));
                     }
                     System.out.println("Size : " + questions.size());
                     mv.addObject("amis", amis.get(i).getLogin());
                     mv.addObject("wallMessage", result);
                     mv.addObject("questions", questions);
-                    mv.addObject("messages", messages);
+                    mv.addObject("message", message);
                 }
             }
         }
@@ -79,7 +79,7 @@ public class WallController {
         List<String> amisString;
         List<String> messages;
         List<String> questions;
-        String message;
+        String message = "";
         
         
         // Si le paramètre login existe dans la requêtre POST
@@ -173,6 +173,10 @@ public class WallController {
                 
                 if(request.getParameterMap().containsKey("message")){
                     message = request.getParameter("message");
+                    questions = personneService.getQuestionsLogin(login);
+                    for (int i = 0; i < questions.size(); i++){
+                        amisString.add(amis.get(i).getLogin());
+                    }
                     MessageEntity m = new MessageEntity(message, personneService.getUserByLogin(login), personneService.getQuestionsEntityLogin(login).get(0));
                     if(!messageService.addMessage(m)){
                         mv = addErrorMessage("Erreur lors de l'ajout de commentaire");
