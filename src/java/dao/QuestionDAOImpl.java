@@ -59,4 +59,11 @@ public class QuestionDAOImpl implements QuestionDAO {
         Query q = em.createQuery("SELECT question FROM QuestionEntity question");
         return q.getResultList();
     }
+    
+    @Transactional(readOnly =true)
+    @Override
+    public List<QuestionEntity> findByChoix(String choix1, String choix2){
+        Query q = em.createQuery("SELECT q FROM QuestionEntity q WHERE q.choix1 = :choix1 AND q.choix2 = :choix2").setParameter("choix1", choix1);
+        return q.getResultList();
+    }
 }

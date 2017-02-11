@@ -79,6 +79,12 @@ public class PersonneServiceImpl implements PersonneService {
         }
         return questionsString;
     }
+    
+    @Override
+    public ArrayList<QuestionEntity> getQuestionsEntityLogin(String login) {
+        ArrayList<QuestionEntity> questions = new ArrayList<>(personneDAO.findByLogin(login).get(0).getQuestions());
+        return questions;
+    }
 
     @Override
     public PersonneEntity getUserByLogin(String login) {

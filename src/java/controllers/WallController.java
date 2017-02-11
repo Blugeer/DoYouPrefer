@@ -7,6 +7,7 @@ package controllers;
 
 import dao.PersonneEntity;
 import dao.QuestionEntity;
+import dao.MessageEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import services.PersonneService;
 import services.QuestionService;
+import services.MessageService;
 
 /**
  * @author natha_000
@@ -35,6 +37,9 @@ public class WallController {
     @Autowired
     private QuestionService questionService ;
     
+    @Autowired
+    private MessageService messageService ;
+    
     @RequestMapping(value="wall", method = RequestMethod.GET)
     public ModelAndView initConnect(@RequestParam(value = "user") String user, HttpServletRequest request){
         HttpSession session;
@@ -47,10 +52,16 @@ public class WallController {
                 if (amis.get(i).getLogin().equals(user)){
                     String result = "Bienvenue sur le mur de " + user;
                     ArrayList<String> questions = personneService.getQuestionsLogin(user);
+                    ArrayList<QuestionEntity> questionsEntity = personneService.getQuestionsEntityLogin(user);
+                    ArrayList<ArrayList<String>> messages = new ArrayList<>();
+                    for (int j = 0; j < questionsEntity.size(); j++){
+                        messages.add(questionService.getMessages(questionsEntity.get(j).getChoix1(), questionsEntity.get(j).getChoix2()));
+                    }
                     System.out.println("Size : " + questions.size());
                     mv.addObject("amis", amis.get(i).getLogin());
                     mv.addObject("wallMessage", result);
                     mv.addObject("questions", questions);
+                    mv.addObject("messages", messages);
                 }
             }
         }
@@ -68,6 +79,7 @@ public class WallController {
         List<String> amisString;
         List<String> messages;
         List<String> questions;
+        ArrayList<ArrayList<String>> commentaires = null;
         
         
         // Si le paramètre login existe dans la requêtre POST
@@ -161,6 +173,17 @@ public class WallController {
                     questions.add(messageFinal); 
                     session.setAttribute("questions", questions);
                 }
+                
+                if(request.getParameterMap().containsKey("Envoyer")){
+                    String message = request.getParameter("message");
+                    MessageEntity m = new MessageEntity(message, personneService.getUserByLogin(login), personneService.getQuestionsEntityLogin(login).get(0));
+                    if(!messageService.addMessage(m)){
+                        mv = addErrorMessage("Erreur lors de l'ajout de commentaire");
+                        return mv;
+                    }
+                    commentaires.get(0).add(message); 
+                    session.setAttribute("messages", commentaires);
+                }
             }
             // Sinon message d'erreur
             else{
@@ -170,12 +193,13 @@ public class WallController {
         }
         
         String result = "Bienvenue sur ton mur " + login;
-        //messages = (ArrayList<String>)session.getAttribute("messages");
+        messages = (ArrayList<String>)session.getAttribute("messages");
         
         mv.addObject("wallMessage", result);
         mv.addObject("user", login);
         mv.addObject("amis", amisString);
         mv.addObject("questions", questions);
+        mv.addObject("messages", messages);
         mv.addObject("login", login);
         return mv;
     }

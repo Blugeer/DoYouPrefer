@@ -5,10 +5,12 @@
  */
 package services;
 
+import dao.MessageEntity;
+
 /**
  *
  * @author natha_000
  */
 public interface MessageService {
-    
+    public Boolean addMessage(MessageEntity m);
 }

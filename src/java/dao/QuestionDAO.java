@@ -17,4 +17,5 @@ public interface QuestionDAO {
     public void delete(QuestionEntity question);
     public QuestionEntity find(long id);
     public List<QuestionEntity> findAll();
+    public List<QuestionEntity> findByChoix(String choix1, String choix2);
 }
