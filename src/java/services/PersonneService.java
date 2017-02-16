@@ -26,6 +26,6 @@ public interface PersonneService {
     public ArrayList<String> getAmisLogin(String login);
     // Fonction récupérant les questiones pour un login donné
     public List<String> getQuestionsLogin(String login);
-    // Fonction récupérant l'objet Personne grâce à un login donné
-    public PersonneEntity getUserByLogin(String login);
+    // Fonction vérifiant si l'objet Personne existe pour un login donné
+    public Boolean getUserByLogin(String login);
 }

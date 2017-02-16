@@ -55,7 +55,7 @@ public class WallController {
                 if (amisLogin.get(i).equals(user)){
                     String result = "Bienvenue sur le mur de " + user;
                     questionsString = personneService.getQuestionsLogin(user);
-                    mv.addObject("user", amisLogin.get(i));
+                    mv.addObject("user", user);
                     mv.addObject("wallMessage", result);
                     mv.addObject("questions", questionsString);
                 }
@@ -97,7 +97,7 @@ public class WallController {
                 }
                 // Cas où les champs sont mal renseignés lors de l'inscription
                 else if (nom != null && prenom != null && mail != null && (nom.length() == 0 || prenom.length() == 0 || mail.length() == 0)){
-                    mv = addErrorMessage("Erreur lors de l'inscription ou de la connexion");
+                    mv = addErrorMessage("Erreur lors de l'inscription");
                     return mv;
                 }
                 // Cas où les identifiants sont invalides lors d'une connexion
@@ -116,7 +116,7 @@ public class WallController {
             }
             // Cas où le login et/ou le mdp sont mal renseignés lors d'une inscription/connexion 
             else{
-               mv = addErrorMessage("Erreur lors de l'inscription ou de la connexion");
+               mv = addErrorMessage("Erreur lors du renseignement de paramètres");
                return mv;
             }
         }
@@ -160,32 +160,36 @@ public class WallController {
                 /**
                  * Si une question a été créé, ainsi que la liste des participants qui va avec
                  */
-                questionsString = personneService.getQuestionsLogin(login);
-                session.setAttribute("questions", questionsString);
                 if(request.getParameterMap().containsKey("choix1") && request.getParameterMap().containsKey("choix2")){
                     String choix1 = request.getParameter("choix1");
                     String choix2 = request.getParameter("choix2");
-                    ArrayList<MurEntity> murs = new ArrayList<>();
-                    murs.add(personneService.getUserByLogin(login).getMur());
+                    
+                    /*ArrayList<MurEntity> murs = new ArrayList<>();
+                    murs.add(personneService.getUserByLogin(login).getMur());*/
+                    
+                    ArrayList<String> totalParticipants = new ArrayList<>();
+                    totalParticipants.add(request.getParameter("login"));
+                    
                     if (session.getAttribute("participants") != null){
-                        ArrayList<PersonneEntity> participants = (ArrayList<PersonneEntity>)session.getAttribute("participants");
+                        ArrayList<String> participants = (ArrayList<String>)session.getAttribute("participants");
                         for (int i = 0; i < participants.size(); i++){
-                            murs.add(personneService.getUserByLogin(participants.get(i).getLogin()).getMur());
+                            totalParticipants.add(participants.get(i));
+                            //murs.add(personneService.getUserByLogin(participants.get(i).getLogin()).getMur());
                         }
-                        NotificationEntity n = new NotificationEntity("Vous avez reçu une nouvelle question de " + session.getAttribute("login"), murs);
+                        /*NotificationEntity n = new NotificationEntity("Vous avez reçu une nouvelle question de " + session.getAttribute("login"), murs);
                         if (!messageService.addNotification(n)){
                             mv = addErrorMessage("Problème d'envoi de notification");
                             return mv;
-                        }
+                        }*/
                         session.setAttribute("participants", new ArrayList<>());
                     }
-                    QuestionEntity q = new QuestionEntity(choix1, choix2, murs);
-                    if(!questionService.addQuestion(q)){
+                    
+                    if(!questionService.addQuestion(choix1, choix2, totalParticipants)){
                         mv = addErrorMessage("Erreur lors de l'ajout de question");
                         return mv;
                     }
-                    questionsString.add(q.toString());
-                    session.setAttribute("questions", questionsString);
+                    
+                    session.setAttribute("questions", questionService.getQuestions(login));
                 }            
             }
             // Sinon message d'erreur
@@ -201,7 +205,7 @@ public class WallController {
         mv.addObject("wallMessage", result);
         mv.addObject("user", login);
         mv.addObject("amis", amisString);
-        mv.addObject("questions", questionsString);
+        mv.addObject("questions", questionService.getQuestions(login));
         return mv;
     }
     
