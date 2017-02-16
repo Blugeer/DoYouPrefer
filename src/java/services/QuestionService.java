@@ -6,6 +6,7 @@
 package services;
 
 import dao.QuestionEntity;
+import dao.ReponseEntity;
 import java.util.ArrayList;
 
 /**
@@ -15,4 +16,5 @@ import java.util.ArrayList;
 public interface QuestionService {
     public Boolean addQuestion(QuestionEntity q);
     public ArrayList<String> getMessages(String choix1, String choix2);
+    public Boolean addReponse(ReponseEntity r);
 }

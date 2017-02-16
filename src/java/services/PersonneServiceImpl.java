@@ -25,6 +25,9 @@ public class PersonneServiceImpl implements PersonneService {
     @Autowired
     PersonneDAO personneDAO;
     
+    @Autowired
+    QuestionDAO questionDAO;
+    
     @Override
     public Boolean connectionUser(String login, String mdp) {
         if (!personneDAO.findByLogin(login).isEmpty()){
@@ -71,23 +74,23 @@ public class PersonneServiceImpl implements PersonneService {
     }
     
     @Override
-    public ArrayList<String> getQuestionsLogin(String login) {
-        List<QuestionEntity> questions = new ArrayList<>(personneDAO.findByLogin(login).get(0).getQuestions());
-        ArrayList<String> questionsString = new ArrayList<>();
-        for (int i = 0; i < questions.size(); i++){
-            questionsString.add(questions.get(i).toString());
-        }
-        return questionsString;
+    public List<QuestionEntity> getQuestionsLogin(String login) {
+        return questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId());
     }
     
-    @Override
-    public ArrayList<QuestionEntity> getQuestionsEntityLogin(String login) {
-        ArrayList<QuestionEntity> questions = new ArrayList<>(personneDAO.findByLogin(login).get(0).getQuestions());
+    /*@Override
+    public ArrayList<String> getQuestionsLogin(String login) {
+        ArrayList<QuestionEntity> questions = new ArrayList<>(personneDAO.findByLogin(login).get(0));
         return questions;
-    }
+    }*/
 
     @Override
     public PersonneEntity getUserByLogin(String login) {
-        return personneDAO.findByLogin(login).get(0);
+        if (personneDAO.findByLogin(login).size() > 0){
+            return personneDAO.findByLogin(login).get(0);
+        }
+        else{
+            return null;
+        }
     }
 }

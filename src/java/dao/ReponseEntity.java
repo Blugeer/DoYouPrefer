@@ -40,9 +40,6 @@ public class ReponseEntity implements Serializable {
     private QuestionEntity questionToReponse;
     
     public ReponseEntity(){
-        /*this.choix = "";
-        this.personneToReponse = new PersonneEntity();
-        this.questionToReponse = new QuestionEntity();*/
     }
     
     public ReponseEntity(String choix, PersonneEntity personneToReponse, QuestionEntity questionToReponse){

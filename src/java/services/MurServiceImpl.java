@@ -5,10 +5,14 @@
  */
 package services;
 
+import org.springframework.stereotype.Service;
+
 /**
  *
  * @author natha_000
  */
+
+@Service
 public class MurServiceImpl implements MurService {
     
 }

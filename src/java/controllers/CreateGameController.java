@@ -38,20 +38,27 @@ public class CreateGameController {
     protected ModelAndView handleRequestInternal(
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        
         HttpSession session;
-        session = request.getSession(true);
-        ModelAndView mv = new ModelAndView("createGame");;
-        //if (request.getParameterMap().containsKey("amis")){ 
-            String amis = "zouz";
-            //ArrayList<PersonneEntity> amis = personneService.getAmisLogin(login);
-            //ArrayList<String> amisString = new ArrayList<>();
-            /*for (int i = 0; i < amis.size(); i++){
-                amisString.add(amis.get(i).getLogin());
-            }*/
-            mv.addObject("amis", amis);
-            //mv.addObject("amis", amisString);
-        //}
+        ModelAndView mv = new ModelAndView("createGame");
+        
+        session = request.getSession(false);
+        List<PersonneEntity> invites;
+        if ((ArrayList<PersonneEntity>)session.getAttribute("participants") == null){
+            invites = new ArrayList<>();
+        }
+        else{
+            invites = (ArrayList<PersonneEntity>)session.getAttribute("participants");
+        }
+        
+        if (request.getParameterMap().containsKey("loginParticipant")){
+            
+            if (personneService.getUserByLogin(request.getParameter("loginParticipant")) != null){    
+                invites.add(personneService.getUserByLogin(request.getParameter("loginParticipant")));
+                session.setAttribute("participants", invites);
+            }
+        }
+        
+        mv.addObject("participants", invites);
         return mv;
     }
     
@@ -65,11 +72,11 @@ public class CreateGameController {
             for (int i = 0; i < amis.size(); i++){
                 if (amis.get(i).getLogin().equals(user)){
                     String result = "Bienvenue sur le mur de " + user;
-                    ArrayList<String> questions = personneService.getQuestionsLogin(user);
-                    System.out.println("Size : " + questions.size());
+                    //ArrayList<String> questions = personneService.getQuestionsLogin(user);
+                    //System.out.println("Size : " + questions.size());
                     mv.addObject("amis", amis.get(i).getLogin());
                     mv.addObject("wallMessage", result);
-                    mv.addObject("questions", questions);
+                    //mv.addObject("questions", questions);
                 }
             }
         }

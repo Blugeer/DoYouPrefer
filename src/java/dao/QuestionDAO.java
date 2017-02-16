@@ -18,4 +18,5 @@ public interface QuestionDAO {
     public QuestionEntity find(long id);
     public List<QuestionEntity> findAll();
     public List<QuestionEntity> findByChoix(String choix1, String choix2);
+    public List<QuestionEntity> findByMur(Long id);
 }
