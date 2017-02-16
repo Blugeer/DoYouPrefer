@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -27,13 +25,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Personne")
 public class PersonneEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     
-    @Column
+    @Id
     private String login;
     @Column
     private String nom;
@@ -74,15 +67,7 @@ public class PersonneEntity implements Serializable {
         this.amis = new ArrayList<>();
         this.messages = new ArrayList<>();
         this.reponses = new ArrayList<>();
-        this.mur = new MurEntity(this, new ArrayList<>());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.mur = new MurEntity(this, new ArrayList<>(), new ArrayList<>());
     }
     
     public List<PersonneEntity> getAmis() { return amis; }
@@ -115,10 +100,10 @@ public class PersonneEntity implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (login != null ? login.hashCode() : 0);
         return hash;
     }
-
+    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -126,7 +111,7 @@ public class PersonneEntity implements Serializable {
             return false;
         }
         PersonneEntity other = (PersonneEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.login == null && other.login != null) || (this.login != null && !this.login.equals(other.login))) {
             return false;
         }
         return true;
@@ -134,7 +119,7 @@ public class PersonneEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.PersonneEntity[ id=" + id + " ]";
+        return "dao.PersonneEntity[ login=" + login + " ]";
     }
     
 }

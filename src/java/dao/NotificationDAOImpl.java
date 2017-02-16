@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author natha_000
  */
 @Repository
-public class QuestionDAOImpl implements QuestionDAO {
+public class NotificationDAOImpl implements NotificationDAO {
     @PersistenceContext(unitName="DoYouPreferPU")
     private EntityManager em;
     public EntityManager getEm() {
@@ -29,40 +29,34 @@ public class QuestionDAOImpl implements QuestionDAO {
     
     @Transactional
     @Override
-    public void save(QuestionEntity question) {
-        question = em.merge(question);
-        em.persist(question);
+    public void save(NotificationEntity notif) {
+        notif = em.merge(notif);
+        em.persist(notif);
     }
     
     @Transactional
     @Override
-    public void update(QuestionEntity question) {
-        em.merge(question);
+    public void update(NotificationEntity notif) {
+        em.merge(notif);
     } 
     
     @Transactional
     @Override
-    public void delete(QuestionEntity question) {
-        question = em.merge(question);
-        em.remove(question);
+    public void delete(NotificationEntity notif) {
+        notif = em.merge(notif);
+        em.remove(notif);
     }
     
     @Transactional(readOnly = true)
     @Override
-    public QuestionEntity find(long id){
-        return em.find(QuestionEntity.class, id);
+    public NotificationEntity find(long id){
+        return em.find(NotificationEntity.class, id);
     }
     
     @Transactional(readOnly =true)
     @Override
-    public List<QuestionEntity> findAll() {
-        Query q = em.createQuery("SELECT question FROM QuestionEntity question");
-        return q.getResultList();
-    }
-
-    @Override
-    public List<QuestionEntity> findByMur(Long id) {
-        Query q = em.createQuery("SELECT question FROM QuestionEntity question LEFT JOIN question.murs m WHERE m.id = :id").setParameter("id", id);
+    public List<NotificationEntity> findAll() {
+        Query q = em.createQuery("SELECT notif FROM NotificationEntity notif");
         return q.getResultList();
     }
 }

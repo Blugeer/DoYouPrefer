@@ -6,7 +6,8 @@
 package services;
 
 import dao.MessageDAO;
-import dao.MessageEntity;
+import dao.NotificationDAO;
+import dao.NotificationEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,20 @@ import org.springframework.stereotype.Service;
  *
  * @author natha_000
  */
+
 @Service
 public class MessageServiceImpl implements MessageService {
           
     @Autowired
     MessageDAO messageDAO;
     
+    @Autowired
+    NotificationDAO notificationDAO;
+
     @Override
-    public Boolean addMessage(MessageEntity m){
-        messageDAO.save(m);
+    public Boolean addNotification(NotificationEntity n) {
+        notificationDAO.save(n);
         return true;
     }
+    
 }

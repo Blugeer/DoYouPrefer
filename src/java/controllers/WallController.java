@@ -6,9 +6,9 @@
 package controllers;
 
 import dao.MurEntity;
+import dao.NotificationEntity;
 import dao.PersonneEntity;
 import dao.QuestionEntity;
-import dao.MessageEntity;
 import dao.ReponseEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import services.MessageService;
 import services.PersonneService;
 import services.QuestionService;
 import services.MessageService;
@@ -39,32 +40,25 @@ public class WallController {
     private QuestionService questionService ;
     
     @Autowired
-    private MessageService messageService ;
+    private MessageService messageService;
     
     @RequestMapping(value="wall", method = RequestMethod.GET)
     public ModelAndView initConnect(@RequestParam(value = "user") String user, HttpServletRequest request){
         /* Quand on visite la page d'un ami */
         HttpSession session;
         session = request.getSession(false);
-        List<QuestionEntity> questions;
+        List<String> questionsString;
         ModelAndView mv = new ModelAndView("wall");
         if (session.getAttribute("login") != null){
             String login = session.getAttribute("login").toString();
-            List<PersonneEntity> amis = personneService.getAmisLogin(login);
-            for (int i = 0; i < amis.size(); i++){
-                if (amis.get(i).getLogin().equals(user)){
+            List<String> amisLogin = personneService.getAmisLogin(login);
+            for (int i = 0; i < amisLogin.size(); i++){
+                if (amisLogin.get(i).equals(user)){
                     String result = "Bienvenue sur le mur de " + user;
-                    //ArrayList<String> questions = personneService.getQuestionsLogin(user);
-                    //ArrayList<QuestionEntity> questionsEntity = personneService.getQuestionsEntityLogin(user);
-                    ArrayList<ArrayList<String>> message = new ArrayList<>();
-                    /*for (int j = 0; j < questionsEntity.size(); j++){
-                        message.add(questionService.getMessages(questionsEntity.get(j).getChoix1(), questionsEntity.get(j).getChoix2()));
-                    }*/
-                    //System.out.println("Size : " + questions.size());
-                    mv.addObject("amis", amis.get(i).getLogin());
+                    questionsString = personneService.getQuestionsLogin(user);
+                    mv.addObject("user", amisLogin.get(i));
                     mv.addObject("wallMessage", result);
-                    //mv.addObject("questions", questions);
-                    mv.addObject("message", message);
+                    mv.addObject("questions", questionsString);
                 }
             }
         }
@@ -78,11 +72,8 @@ public class WallController {
         HttpSession session;
         ModelAndView mv;
         String login, nom, prenom, mdp, mail;
-        List<PersonneEntity> amis;
         List<String> amisString;
-        List<String> messages;
-        List<String> questions;
-        String message = "";
+        List<String> questionsString;
         
         
         // Si le paramètre login existe dans la requêtre POST (connexion ou création de compte)
@@ -120,14 +111,10 @@ public class WallController {
                 mv = new ModelAndView("wall");
                 session = request.getSession(true);
                 session.setAttribute("login", request.getParameter("login"));
-                amis = personneService.getAmisLogin(login);
-                amisString = new ArrayList<>();
-                for (int i = 0; i < amis.size(); i++){
-                    amisString.add(amis.get(i).getLogin());
-                }
+                amisString = personneService.getAmisLogin(login);
                 session.setAttribute("amis", amisString);
-                //questions = personneService.getQuestionsLogin(login);
-                //session.setAttribute("questions", questions);
+                questionsString = personneService.getQuestionsLogin(login);
+                session.setAttribute("questions", questionsString);
             }
             // Cas où le login et/ou le mdp sont mal renseignés lors d'une inscription/connexion 
             else{
@@ -151,14 +138,13 @@ public class WallController {
             if (session.getAttribute("login") != null){
                 mv = new ModelAndView("wall");
                 login = (String)session.getAttribute("login");
-                amis = personneService.getAmisLogin(login);
-                amisString = new ArrayList<>();
-                for (int i = 0; i < amis.size(); i++){
-                    amisString.add(amis.get(i).getLogin());
-                }
+                amisString = personneService.getAmisLogin(login);
                 session.setAttribute("amis", amisString);
                 
-                if(request.getParameterMap().containsKey("answer1") || request.getParameterMap().containsKey("answer2")){
+                /**
+                 * Si l'on observe qu'une réponse a été sélectionnée
+                 */
+                /*if(request.getParameterMap().containsKey("answer1") || request.getParameterMap().containsKey("answer2")){
                     if (request.getParameterMap().containsKey("answer1") && request.getParameterMap().containsKey("question")){
                         int index = Integer.parseInt(request.getParameter("question"));
                         ReponseEntity r = new ReponseEntity(login, personneService.getUserByLogin(login), personneService.getQuestionsLogin(login).get(index));
@@ -171,37 +157,38 @@ public class WallController {
                         r.setChoix(personneService.getQuestionsLogin(login).get(index).getChoix2());
                         questionService.addReponse(r);
                     }
-                }    
+                } */   
                 
-                /*questions = personneService.getQuestionsLogin(login);
-                session.setAttribute("questions", questions);
+                /**
+                 * Si une question a été créé, ainsi que la liste des participants qui va avec
+                 */
+                questionsString = personneService.getQuestionsLogin(login);
+                session.setAttribute("questions", questionsString);
                 if(request.getParameterMap().containsKey("choix1") && request.getParameterMap().containsKey("choix2")){
                     String choix1 = request.getParameter("choix1");
                     String choix2 = request.getParameter("choix2");
                     ArrayList<MurEntity> murs = new ArrayList<>();
                     murs.add(personneService.getUserByLogin(login).getMur());
+                    if (session.getAttribute("participants") != null){
+                        ArrayList<PersonneEntity> participants = (ArrayList<PersonneEntity>)session.getAttribute("participants");
+                        for (int i = 0; i < participants.size(); i++){
+                            murs.add(personneService.getUserByLogin(participants.get(i).getLogin()).getMur());
+                        }
+                        NotificationEntity n = new NotificationEntity("Vous avez reçu une nouvelle question de " + session.getAttribute("login"), murs);
+                        if (!messageService.addNotification(n)){
+                            mv = addErrorMessage("Problème d'envoi de notification");
+                            return mv;
+                        }
+                        session.setAttribute("participants", new ArrayList<>());
+                    }
                     QuestionEntity q = new QuestionEntity(choix1, choix2, murs);
                     if(!questionService.addQuestion(q)){
                         mv = addErrorMessage("Erreur lors de l'ajout de question");
                         return mv;
                     }
-                    questions.add(messageFinal); 
-                    session.setAttribute("questions", questions);
-                }*/
-                
-                /*if(request.getParameterMap().containsKey("message")){
-                    message = request.getParameter("message");
-                    questions = personneService.getQuestionsLogin(login);
-                    for (int i = 0; i < questions.size(); i++){
-                        amisString.add(amis.get(i).getLogin());
-                    }
-                    MessageEntity m = new MessageEntity(message, personneService.getUserByLogin(login), personneService.getQuestionsEntityLogin(login).get(0));
-                    if(!messageService.addMessage(m)){
-                        mv = addErrorMessage("Erreur lors de l'ajout de commentaire");
-                        return mv;
-                    }
-                    session.setAttribute("message", message);
-                }*/
+                    questionsString.add(q.toString());
+                    session.setAttribute("questions", questionsString);
+                }            
             }
             // Sinon message d'erreur
             else{
@@ -211,15 +198,12 @@ public class WallController {
         }
         
         String result = "Bienvenue sur ton mur " + login;
-        messages = (ArrayList<String>)session.getAttribute("messages");
+        ArrayList<String> messages = (ArrayList<String>)session.getAttribute("messages");
         
         mv.addObject("wallMessage", result);
         mv.addObject("user", login);
         mv.addObject("amis", amisString);
-        //mv.addObject("questions", questions);
-        mv.addObject("messages", messages);
-        mv.addObject("message", message);
-        mv.addObject("login", login);
+        mv.addObject("questions", questionsString);
         return mv;
     }
     

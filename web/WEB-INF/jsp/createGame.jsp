@@ -99,11 +99,11 @@
                     Login de l'ami : <INPUT Type=text Name=loginParticipant class="filltext"> 
                     <INPUT Type=submit VALUE="Ajouter" class="btn btn-default btn-lg"> 
                 </P>
-                <c:forEach items="${participants}" var="part">
+                <%-- <c:forEach items="${participants}" var="part">
                     <p>
                         ${part} <br/>
                     </p>
-                </c:forEach>
+                </c:forEach> --%>
             </FORM> 
             <FORM method="POST" ACTION="wall.htm" class="form">
                 <P> Tu préfères :</P>

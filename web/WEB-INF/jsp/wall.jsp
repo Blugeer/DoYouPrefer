@@ -121,8 +121,8 @@
                 <c:forEach items="${questions}" var="current" varStatus="ind">
                     <FORM method="POST" ACTION="wall.htm">
                         <P> 
-                            ${current.toString()}
-                            <c:set var="foundUser" value="false"/>
+                            ${current}
+                            <%-- <c:set var="foundUser" value="false"/>
                             <c:forEach items="${current.getReponses()}" var="reponses">
                                 <c:if test="${reponses.getPersonne().getLogin() == user}">
                                     <c:set var="foundUser" value="true"/>
@@ -136,7 +136,7 @@
                             </c:if>
                             <c:if test="${foundUser eq 'true'}">
                                 Vous avez déjà répondu à cette question <br/>
-                            </c:if>
+                            </c:if> --%>
                         </P>  
                     </FORM>   
                 </c:forEach>
@@ -150,8 +150,8 @@
                 <c:forEach items="${questions}" var="current" varStatus="ind">
                     <FORM method="POST" ACTION="wall.htm">
                         <P> 
-                            ${current.toString()}
-                            <c:set var="foundUser" value="false"/>
+                            ${current}
+                            <%-- <c:set var="foundUser" value="false"/>
                             <c:forEach items="${current.getReponses()}" var="reponses">
                                 <c:if test="${reponses.getPersonne().getLogin() == user}">
                                     <c:set var="foundUser" value="true"/>
@@ -165,7 +165,7 @@
                             </c:if>
                             <c:if test="${foundUser eq true}">
                                 Vous avez déjà répondu à cette question <br/>
-                            </c:if>
+                            </c:if> --%>
                         </P>  
                     </FORM>   
                 </c:forEach>

@@ -8,44 +8,47 @@ package dao;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
  *
  * @author natha_000
  */
-@Entity
-@Table(name="Mur")
-public class MurEntity implements Serializable {
 
+@Entity
+@Table(name="Notification")
+public class NotificationEntity implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @OneToOne
-    private PersonneEntity personneToMur;
+    @Column
+    private String message;
     
-    @ManyToMany(mappedBy="murs")
-    private List<QuestionEntity> questions;
+    @JoinTable(
+            name="notifsToMurs_fk",
+            joinColumns=@JoinColumn(name="id_notif"),
+            inverseJoinColumns=@JoinColumn(name="id_mur")
+    )
+    @ManyToMany
+    private List<MurEntity> murs;
     
-    
-    @ManyToMany(mappedBy="murs")
-    private List<NotificationEntity> notifs;
-    
-    public MurEntity(){
+    public NotificationEntity(){
     } 
     
-    public MurEntity(PersonneEntity personneToMur, ArrayList<QuestionEntity> questions, ArrayList<NotificationEntity> notifs){
-        this.personneToMur = personneToMur;
-        this.questions = questions;
-        this.notifs = notifs;
+    public NotificationEntity(String message, ArrayList<MurEntity> murs){
+        this.message = message;
+        this.murs = murs;
     }
     
     public Long getId() {
@@ -56,15 +59,12 @@ public class MurEntity implements Serializable {
         this.id = id;
     }
     
-    public PersonneEntity getPersonne() { return this.personneToMur; }
-    public void setPersonne(PersonneEntity personneToMur) { this.personneToMur=personneToMur; }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message=message; }
     
-    public List<QuestionEntity> getQuestions() { return this.questions; }
-    public void setQuestions(List<QuestionEntity> questions) { this.questions = questions; }
+    public List<MurEntity> getMessages() { return murs; }
+    public void setMessages(List<MurEntity> murs) { this.murs=murs; }
     
-    public List<NotificationEntity> getNotifs() { return this.notifs; }
-    public void setNotifs(List<NotificationEntity> notifs) { this.notifs = notifs; }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -75,10 +75,10 @@ public class MurEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MurEntity)) {
+        if (!(object instanceof NotificationEntity)) {
             return false;
         }
-        MurEntity other = (MurEntity) object;
+        NotificationEntity other = (NotificationEntity) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -87,6 +87,6 @@ public class MurEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "dao.MurEntity[ id=" + id + " ]";
-    }    
+        return "dao.NotificationEntity[ id=" + id + " ]";
+    }
 }

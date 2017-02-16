@@ -7,14 +7,14 @@ package services;
 
 import dao.QuestionEntity;
 import dao.ReponseEntity;
-import java.util.ArrayList;
 
 /**
  *
  * @author natha_000
  */
 public interface QuestionService {
+    // Fonction permettant l'ajout d'une question dans la BD
     public Boolean addQuestion(QuestionEntity q);
-    public ArrayList<String> getMessages(String choix1, String choix2);
+    // Fonction permettant l'ajout d'une réponse dans la BD
     public Boolean addReponse(ReponseEntity r);
 }
