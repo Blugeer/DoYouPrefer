@@ -168,7 +168,7 @@ public class WallController {
                     murs.add(personneService.getUserByLogin(login).getMur());*/
                     
                     ArrayList<String> totalParticipants = new ArrayList<>();
-                    totalParticipants.add(request.getParameter("login"));
+                    totalParticipants.add(login);
                     
                     if (session.getAttribute("participants") != null){
                         ArrayList<String> participants = (ArrayList<String>)session.getAttribute("participants");
