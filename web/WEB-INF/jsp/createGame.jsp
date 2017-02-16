@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -99,11 +100,12 @@
                     Login de l'ami : <INPUT Type=text Name=loginParticipant class="filltext"> 
                     <INPUT Type=submit VALUE="Ajouter" class="btn btn-default btn-lg"> 
                 </P>
-                <%-- <c:forEach items="${participants}" var="part">
+                <h4> Liste des participants </h4>
+                <c:forEach items="${participants}" var="invite">
                     <p>
-                        ${part} <br/>
+                        ${invite}
                     </p>
-                </c:forEach> --%>
+                </c:forEach>
             </FORM> 
             <FORM method="POST" ACTION="wall.htm" class="form">
                 <P> Tu préfères :</P>
