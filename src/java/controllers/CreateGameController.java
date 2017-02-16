@@ -41,12 +41,12 @@ public class CreateGameController {
         ModelAndView mv = new ModelAndView("createGame");
         
         session = request.getSession(false);
-        List<PersonneEntity> invites;
+        List<String> invites;
         if ((ArrayList<PersonneEntity>)session.getAttribute("participants") == null){
             invites = new ArrayList<>();
         }
         else{
-            invites = (ArrayList<PersonneEntity>)session.getAttribute("participants");
+            invites = (ArrayList<String>)session.getAttribute("participants");
         }
         
         /**
@@ -56,13 +56,11 @@ public class CreateGameController {
         if (request.getParameterMap().containsKey("loginParticipant")){
             
             if (personneService.getUserByLogin(request.getParameter("loginParticipant")) != null){
-                ArrayList<PersonneEntity> amis;
-                System.out.println((String)session.getAttribute("user"));
-                amis = personneService.getAmisLogin((String)session.getAttribute("login"));
-                System.out.println("AMIS : " + amis.size());
-                for (int i = 0; i < amis.size(); i++){
-                    if (amis.get(i).getLogin().equals(request.getParameter("loginParticipant"))){
-                        invites.add(personneService.getUserByLogin(request.getParameter("loginParticipant")));
+                ArrayList<String> amisLogin;
+                amisLogin = personneService.getAmisLogin((String)session.getAttribute("login"));
+                for (int i = 0; i < amisLogin.size(); i++){
+                    if (amisLogin.get(i).equals(request.getParameter("loginParticipant"))){
+                        invites.add(amisLogin.get(i));
                     }
                 }
                 session.setAttribute("participants", invites);

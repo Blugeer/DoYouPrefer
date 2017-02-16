@@ -5,10 +5,26 @@
  */
 package services;
 
+import dao.NotificationDAO;
+import dao.NotificationEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
  *
  * @author natha_000
  */
+
+@Service
 public class MessageServiceImpl implements MessageService {
+    
+    @Autowired
+    NotificationDAO notificationDAO;
+
+    @Override
+    public Boolean addNotification(NotificationEntity n) {
+        notificationDAO.save(n);
+        return true;
+    }
     
 }

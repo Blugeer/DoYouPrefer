@@ -61,25 +61,35 @@ public class PersonneServiceImpl implements PersonneService {
         return false;
     }
 
-    @Override
+    /*@Override
     public ArrayList<String> getMessages(String login) {
         //return personneDAO.
         return null;
-    }
+    }*/
 
     @Override
-    public ArrayList<PersonneEntity> getAmisLogin(String login) {
-        if (personneDAO.findByLogin(login).get(0).getAmis().size() > 0){
-            return new ArrayList<>(personneDAO.findByLogin(login).get(0).getAmis());
+    public ArrayList<String> getAmisLogin(String login) {
+        List<PersonneEntity> amis = personneDAO.findByLogin(login).get(0).getAmis();
+        ArrayList<String> amisLogin = new ArrayList<>();
+        if (amis.size() > 0){
+            for (int i = 0; i < amis.size(); i++){
+                amisLogin.add(amis.get(i).getLogin());
+            }
         }
-        else{
-            return new ArrayList<>();
-        }
+        return amisLogin;
     }
     
     @Override
-    public List<QuestionEntity> getQuestionsLogin(String login) {
-        return questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId());
+    public List<String> getQuestionsLogin(String login) {
+        List<QuestionEntity> questions = questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId());
+        ArrayList<String> questionsString = new ArrayList<>();
+        if (questions.size() > 0){
+            for (int i = 0; i < questions.size(); i++){
+                questionsString.add(questions.get(i).toString());
+            }
+            
+        }
+        return questionsString;
     }
 
     @Override

@@ -6,7 +6,6 @@
 package services;
 
 import dao.PersonneEntity;
-import dao.QuestionEntity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +21,11 @@ public interface PersonneService {
     // Fonction permettant l'ajout d'un ami dans la BD
     public Boolean addAmi(String login, String loginAmi);
     // Fonction récupérant les messages pour un login donné
-    public ArrayList<String> getMessages(String login);
+    //public ArrayList<String> getMessages(String login);
     // Fonction récupérant les amis pour un login donné
-    public ArrayList<PersonneEntity> getAmisLogin(String login);
+    public ArrayList<String> getAmisLogin(String login);
     // Fonction récupérant les questiones pour un login donné
-    public List<QuestionEntity> getQuestionsLogin(String login);
+    public List<String> getQuestionsLogin(String login);
     // Fonction récupérant l'objet Personne grâce à un login donné
     public PersonneEntity getUserByLogin(String login);
 }

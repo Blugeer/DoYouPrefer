@@ -26,6 +26,8 @@ public class QuestionServiceImpl implements QuestionService{
     @Autowired
     ReponseDAO reponseDAO;
     
+    PersonneService personneService;
+    
     @Override
     public Boolean addQuestion(QuestionEntity q){
         questionDAO.save(q);

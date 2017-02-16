@@ -5,10 +5,12 @@
  */
 package services;
 
+import dao.NotificationEntity;
+
 /**
  *
  * @author natha_000
  */
 public interface MessageService {
-    
+    public Boolean addNotification(NotificationEntity n);
 }
