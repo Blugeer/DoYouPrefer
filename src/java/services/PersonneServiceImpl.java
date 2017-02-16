@@ -99,12 +99,7 @@ public class PersonneServiceImpl implements PersonneService {
     }*/
 
     @Override
-    public PersonneEntity getUserByLogin(String login) {
-        if (personneDAO.findByLogin(login).size() > 0){
-            return personneDAO.findByLogin(login).get(0);
-        }
-        else{
-            return null;
-        }
+    public Boolean getUserByLogin(String login) {
+        return (personneDAO.findByLogin(login).size() > 0);
     }
 }
