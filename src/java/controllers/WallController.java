@@ -58,6 +58,7 @@ public class WallController {
                     mv.addObject("user", user);
                     mv.addObject("wallMessage", result);
                     mv.addObject("questions", questionsString);
+                    mv.addObject("questionsAnswered", questionService.getQuestionsAnswered(login));
                 }
             }
         }
@@ -142,30 +143,23 @@ public class WallController {
                 /**
                  * Si l'on observe qu'une réponse a été sélectionnée
                  */
-                /*if(request.getParameterMap().containsKey("answer1") || request.getParameterMap().containsKey("answer2")){
+                if(request.getParameterMap().containsKey("answer1") || request.getParameterMap().containsKey("answer2")){
                     if (request.getParameterMap().containsKey("answer1") && request.getParameterMap().containsKey("question")){
                         int index = Integer.parseInt(request.getParameter("question"));
-                        ReponseEntity r = new ReponseEntity(login, personneService.getUserByLogin(login), personneService.getQuestionsLogin(login).get(index));
-                        r.setChoix(personneService.getQuestionsLogin(login).get(index).getChoix1());
-                        questionService.addReponse(r);
+                        questionService.addReponse(login, index, 1); 
                     }
                     if (request.getParameterMap().containsKey("answer2") && request.getParameterMap().containsKey("question")){
                         int index = Integer.parseInt(request.getParameter("question"));
-                        ReponseEntity r = new ReponseEntity(login, personneService.getUserByLogin(login), personneService.getQuestionsLogin(login).get(index));
-                        r.setChoix(personneService.getQuestionsLogin(login).get(index).getChoix2());
-                        questionService.addReponse(r);
+                        questionService.addReponse(login, index, 2);
                     }
-                } */   
+                }  
                 
                 /**
                  * Si une question a été créé, ainsi que la liste des participants qui va avec
                  */
                 if(request.getParameterMap().containsKey("choix1") && request.getParameterMap().containsKey("choix2")){
                     String choix1 = request.getParameter("choix1");
-                    String choix2 = request.getParameter("choix2");
-                    
-                    /*ArrayList<MurEntity> murs = new ArrayList<>();
-                    murs.add(personneService.getUserByLogin(login).getMur());*/
+                    String choix2 = request.getParameter("choix2");     
                     
                     ArrayList<String> totalParticipants = new ArrayList<>();
                     totalParticipants.add(login);
@@ -174,7 +168,6 @@ public class WallController {
                         ArrayList<String> participants = (ArrayList<String>)session.getAttribute("participants");
                         for (int i = 0; i < participants.size(); i++){
                             totalParticipants.add(participants.get(i));
-                            //murs.add(personneService.getUserByLogin(participants.get(i).getLogin()).getMur());
                         }
                         /*NotificationEntity n = new NotificationEntity("Vous avez reçu une nouvelle question de " + session.getAttribute("login"), murs);
                         if (!messageService.addNotification(n)){
@@ -206,6 +199,7 @@ public class WallController {
         mv.addObject("user", login);
         mv.addObject("amis", amisString);
         mv.addObject("questions", questionService.getQuestions(login));
+        mv.addObject("questionsAnswered", questionService.getQuestionsAnswered(login));
         return mv;
     }
     

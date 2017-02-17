@@ -62,10 +62,6 @@ public class CreateGameController {
                     }
                 }
                 session.setAttribute("participants", invites);
-                for (int i = 0; i < invites.size(); i++){
-                    System.out.println(invites.get(i));
-                }
-                return "redirect:/createGame.htm";
             }
         }
               

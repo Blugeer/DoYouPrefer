@@ -17,4 +17,5 @@ public interface ReponseDAO {
     public void delete(ReponseEntity reponse);
     public ReponseEntity find(long id);
     public List<ReponseEntity> findAll();
+    public List<ReponseEntity> findByLogin(String login);
 }

@@ -50,7 +50,19 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Boolean addReponse(ReponseEntity r) {
+    public Boolean addReponse(String login, int index, int choix) {
+        QuestionEntity q = questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId()).get(index);
+        ReponseEntity r = new ReponseEntity(login, personneDAO.findByLogin(login).get(0), q);
+        switch (choix) {
+            case 1:
+                r.setChoix(q.getChoix1());
+                break;
+            case 2:
+                r.setChoix(q.getChoix2());
+                break;
+            default:
+                return false;
+        }
         reponseDAO.save(r);
         return true;
     }
@@ -64,5 +76,27 @@ public class QuestionServiceImpl implements QuestionService{
             questionsString.add(questions.get(i).toString());
         }
         return questionsString;
+    }
+    
+    
+    @Override
+    public ArrayList<Boolean> getQuestionsAnswered(String login) {
+        
+        List<QuestionEntity> questions = questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId());
+        List<ReponseEntity> reponses = reponseDAO.findByLogin(login);
+        ArrayList<Boolean> questionsAnsweredByLogin = new ArrayList<>();
+        boolean found;
+        
+        for (int i = 0; i < questions.size(); i++){
+            found = false;
+            for (int j = 0; j < reponses.size(); j++){
+               if (questions.get(i).equals(reponses.get(j).getQuestion()) && !found){
+                   found = true;
+               }
+            }
+            questionsAnsweredByLogin.add(found);
+        }
+        
+        return questionsAnsweredByLogin;
     }
 }
