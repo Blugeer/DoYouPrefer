@@ -110,10 +110,12 @@ public class PersonneServiceImpl implements PersonneService {
         List<QuestionEntity> questions = questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId());
         for(int i=0 ; i<questions.size() ; i++){
             ArrayList<String> UtilisateurCommentaireList = new ArrayList<>();
-            for(int j=0 ; j<questions.get(i).getMessages().size() ; j++){
-                MessageEntity message = questions.get(i).getMessages().get(j);
-                String UtilisateurCommentaire = message.getPersonne().getLogin() + " : " + message.getContenu();
-                UtilisateurCommentaireList.add(UtilisateurCommentaire);
+            if(!questions.get(i).getMessages().isEmpty()){
+                for(int j=0 ; j<questions.get(i).getMessages().size() ; j++){
+                    MessageEntity message = questions.get(i).getMessages().get(j);
+                    String UtilisateurCommentaire = message.getPersonne().getLogin() + " : " + message.getContenu();
+                    UtilisateurCommentaireList.add(UtilisateurCommentaire);
+                }
             }
             commentaires.add(UtilisateurCommentaireList);
         }
