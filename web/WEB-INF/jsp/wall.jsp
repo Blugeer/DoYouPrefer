@@ -137,7 +137,14 @@
                             <c:if test="${foundUser eq 'true'}">
                                 Vous avez déjà répondu à cette question <br/>
                             </c:if> --%>
-                        </P>  
+                        </P>
+                        <c:forEach items="${commentaires[ind.index]}" var="currentComments">
+                            <P> ${currentComments} </P>
+                        </c:forEach>
+                        <P> 
+                            <INPUT Type=text Name=commentaire class="filltext">
+                            <INPUT type=submit value="Envoyer" Name=${ind.index} class="btn btn-default btn-lg input">
+                        </P>
                     </FORM>   
                 </c:forEach>
             </div>

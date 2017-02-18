@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import dao.MessageEntity;
 import dao.MurEntity;
 import dao.NotificationEntity;
 import dao.PersonneEntity;
@@ -59,9 +60,25 @@ public class WallController {
                     mv.addObject("user", user);
                     mv.addObject("wallMessage", result);
                     mv.addObject("questions", questionsString);
+                    
+                    ArrayList<ArrayList<String>> commentaires = personneService.getMessagesLogin(login);
+                    /*ArrayList<String> commentaire1 = new ArrayList<>();
+                    ArrayList<String> commentaire2 = new ArrayList<>();
+                    ArrayList<ArrayList<String>> commentaires = new ArrayList<>();
+
+                    commentaire1.add("commentaire1");
+                    commentaire1.add("commentaire2");
+                    commentaire1.add("commentaire3");
+                    commentaire2.add("commentaire4");
+                    commentaire2.add("commentaire5");
+                    commentaires.add(commentaire1);
+                    commentaires.add(commentaire2);*/
+
+                    mv.addObject("commentaires", commentaires);
                 }
             }
         }
+
 	return mv;
     }
      
@@ -186,7 +203,7 @@ public class WallController {
                         session.setAttribute("participants", new ArrayList<>());
                     }
                     
-                    if(!questionService.addQuestion(choix1, choix2, totalParticipants)){
+                    if(!questionService.addQuestion(choix1, choix2, totalParticipants, (String)session.getAttribute("login"))){
                         mv = addErrorMessage("Erreur lors de l'ajout de question");
                         return mv;
                     }
@@ -201,12 +218,32 @@ public class WallController {
             }
         }
         
+        if (request.getParameterMap().containsKey("commentaire")){
+            // Si l'ajout d'un commentaire ne se passe pas bien, on affiche un message d'erreur
+            if(!messageService.addMessage(request.getParameter("commentaire"), session.getAttribute("login").toString(), Long.parseLong("2"))){
+                mv = addErrorMessage("Erreur lors de l'ajout du commentaire");
+                return mv;
+            }
+        }
+        
         String result = "Bienvenue sur ton mur " + login;
-        ArrayList<String> messages = (ArrayList<String>)session.getAttribute("messages");
+        ArrayList<ArrayList<String>> commentaires = personneService.getMessagesLogin(login);
+        /*ArrayList<String> commentaire1 = new ArrayList<>();
+        ArrayList<String> commentaire2 = new ArrayList<>();
+        ArrayList<ArrayList<String>> commentaires = new ArrayList<>();
+        
+        commentaire1.add("commentaire1");
+        commentaire1.add("commentaire2");
+        commentaire1.add("commentaire3");
+        commentaire2.add("commentaire4");
+        commentaire2.add("commentaire5");
+        commentaires.add(commentaire1);
+        commentaires.add(commentaire2);*/
         
         mv.addObject("wallMessage", result);
         mv.addObject("user", login);
         mv.addObject("amis", amisString);
+        mv.addObject("commentaires", commentaires);
         mv.addObject("questions", questionService.getQuestions(login));
         return mv;
     }

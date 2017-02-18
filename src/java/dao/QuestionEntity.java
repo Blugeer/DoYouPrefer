@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -44,6 +45,10 @@ public class QuestionEntity implements Serializable {
     @OneToMany(mappedBy="questionToReponse")
     private List<ReponseEntity> reponses;
     
+    @ManyToOne
+    @JoinColumn(name="personneToQuestion_fk")
+    private PersonneEntity personneToQuestion;
+    
     @JoinTable(
             name="mursToQuestions_fk",
             joinColumns=@JoinColumn(name="id_question"),
@@ -55,12 +60,13 @@ public class QuestionEntity implements Serializable {
     public QuestionEntity(){
     }
     
-    public QuestionEntity(String choix1, String choix2, ArrayList<MurEntity> murs){
+    public QuestionEntity(String choix1, String choix2, ArrayList<MurEntity> murs, PersonneEntity personne){
         this.choix1 = choix1;
         this.choix2 = choix2;
         this.messages = new ArrayList<>();
         this.reponses = new ArrayList<>();
         this.murs = murs;
+        this.personneToQuestion = personne;
     }
 
     public Long getId() {
@@ -82,6 +88,9 @@ public class QuestionEntity implements Serializable {
     
     public List<ReponseEntity> getReponses() { return reponses; }
     public void setReponses(List<ReponseEntity> reponses) { this.reponses=reponses; }
+    
+    public PersonneEntity getPersonne() { return this.personneToQuestion; }
+    public void setPersonne(PersonneEntity personne) { this.personneToQuestion=personne; }
     
     public List<MurEntity> getMurs() { return murs; }
     public void setMurs(List<MurEntity> murs) { this.murs=murs; }

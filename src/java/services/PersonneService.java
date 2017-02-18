@@ -30,4 +30,6 @@ public interface PersonneService {
     public List<String> getQuestionsLogin(String login);
     // Fonction vérifiant si l'objet Personne existe pour un login donné
     public Boolean getUserByLogin(String login);
+    // Fonction récupérant les messages du mur de d'une personne pour un login donné
+    public ArrayList<ArrayList<String>> getMessagesLogin(String login);
 }

@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public interface QuestionService {
     // Fonction permettant l'ajout d'une question dans la BD
-    public Boolean addQuestion(String choix1, String choix2, ArrayList<String> totalParticipants);
+    public Boolean addQuestion(String choix1, String choix2, ArrayList<String> totalParticipants, String login);
     // Fonction permettant l'ajout d'une réponse dans la BD
     public Boolean addReponse(ReponseEntity r);
     // Permet de renvoyer la liste des questions sous forme de chaîne de caractères
