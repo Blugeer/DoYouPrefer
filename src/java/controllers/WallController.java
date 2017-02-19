@@ -60,21 +60,9 @@ public class WallController {
                     mv.addObject("user", user);
                     mv.addObject("wallMessage", result);
                     mv.addObject("questions", questionsString);
-                    
-                    ArrayList<ArrayList<String>> commentaires = personneService.getMessagesLogin(login);
-                    /*ArrayList<String> commentaire1 = new ArrayList<>();
-                    ArrayList<String> commentaire2 = new ArrayList<>();
-                    ArrayList<ArrayList<String>> commentaires = new ArrayList<>();
-
-                    commentaire1.add("commentaire1");
-                    commentaire1.add("commentaire2");
-                    commentaire1.add("commentaire3");
-                    commentaire2.add("commentaire4");
-                    commentaire2.add("commentaire5");
-                    commentaires.add(commentaire1);
-                    commentaires.add(commentaire2);*/
-
+                    ArrayList<ArrayList<String>> commentaires = personneService.getMessagesLogin(user);
                     mv.addObject("commentaires", commentaires);
+                    mv.addObject("questionsAnswered", questionService.getQuestionsAnswered(login));
                 }
             }
         }
@@ -138,6 +126,7 @@ public class WallController {
                mv = addErrorMessage("Erreur lors du renseignement de paramètres");
                return mv;
             }
+
         }
         // Si le paramètre login n'existe pas dans la requêtre POST
         else{
@@ -161,30 +150,23 @@ public class WallController {
                 /**
                  * Si l'on observe qu'une réponse a été sélectionnée
                  */
-                /*if(request.getParameterMap().containsKey("answer1") || request.getParameterMap().containsKey("answer2")){
+                if(request.getParameterMap().containsKey("answer1") || request.getParameterMap().containsKey("answer2")){
                     if (request.getParameterMap().containsKey("answer1") && request.getParameterMap().containsKey("question")){
                         int index = Integer.parseInt(request.getParameter("question"));
-                        ReponseEntity r = new ReponseEntity(login, personneService.getUserByLogin(login), personneService.getQuestionsLogin(login).get(index));
-                        r.setChoix(personneService.getQuestionsLogin(login).get(index).getChoix1());
-                        questionService.addReponse(r);
+                        questionService.addReponse(login, index, 1); 
                     }
                     if (request.getParameterMap().containsKey("answer2") && request.getParameterMap().containsKey("question")){
                         int index = Integer.parseInt(request.getParameter("question"));
-                        ReponseEntity r = new ReponseEntity(login, personneService.getUserByLogin(login), personneService.getQuestionsLogin(login).get(index));
-                        r.setChoix(personneService.getQuestionsLogin(login).get(index).getChoix2());
-                        questionService.addReponse(r);
+                        questionService.addReponse(login, index, 2);
                     }
-                } */   
+                }  
                 
                 /**
                  * Si une question a été créé, ainsi que la liste des participants qui va avec
                  */
                 if(request.getParameterMap().containsKey("choix1") && request.getParameterMap().containsKey("choix2")){
                     String choix1 = request.getParameter("choix1");
-                    String choix2 = request.getParameter("choix2");
-                    
-                    /*ArrayList<MurEntity> murs = new ArrayList<>();
-                    murs.add(personneService.getUserByLogin(login).getMur());*/
+                    String choix2 = request.getParameter("choix2");     
                     
                     ArrayList<String> totalParticipants = new ArrayList<>();
                     totalParticipants.add(login);
@@ -193,7 +175,6 @@ public class WallController {
                         ArrayList<String> participants = (ArrayList<String>)session.getAttribute("participants");
                         for (int i = 0; i < participants.size(); i++){
                             totalParticipants.add(participants.get(i));
-                            //murs.add(personneService.getUserByLogin(participants.get(i).getLogin()).getMur());
                         }
                         /*NotificationEntity n = new NotificationEntity("Vous avez reçu une nouvelle question de " + session.getAttribute("login"), murs);
                         if (!messageService.addNotification(n)){
@@ -209,7 +190,7 @@ public class WallController {
                     }
                     
                     session.setAttribute("questions", questionService.getQuestions(login));
-                }            
+                }
             }
             // Sinon message d'erreur
             else{
@@ -219,32 +200,30 @@ public class WallController {
         }
         
         if (request.getParameterMap().containsKey("commentaire")){
-            // Si l'ajout d'un commentaire ne se passe pas bien, on affiche un message d'erreur
-            if(!messageService.addMessage(request.getParameter("commentaire"), session.getAttribute("login").toString(), Long.parseLong("2"))){
-                mv = addErrorMessage("Erreur lors de l'ajout du commentaire");
-                return mv;
+            if (request.getParameterMap().containsKey("user")){
+                // Si l'ajout d'un commentaire ne se passe pas bien, on affiche un message d'erreur
+                if(!messageService.addMessage(request.getParameter("commentaire"), request.getParameter("user").toString(), Integer.parseInt(request.getParameter("question")))){
+                    mv = addErrorMessage("Erreur lors de l'ajout du commentaire");
+                    return mv;
+                }
+            }
+            else{
+                if(!messageService.addMessage(request.getParameter("commentaire"), session.getAttribute("login").toString(), Integer.parseInt(request.getParameter("question")))){
+                    mv = addErrorMessage("Erreur lors de l'ajout du commentaire");
+                    return mv;
+                }
             }
         }
-        
+                        
         String result = "Bienvenue sur ton mur " + login;
         ArrayList<ArrayList<String>> commentaires = personneService.getMessagesLogin(login);
-        /*ArrayList<String> commentaire1 = new ArrayList<>();
-        ArrayList<String> commentaire2 = new ArrayList<>();
-        ArrayList<ArrayList<String>> commentaires = new ArrayList<>();
-        
-        commentaire1.add("commentaire1");
-        commentaire1.add("commentaire2");
-        commentaire1.add("commentaire3");
-        commentaire2.add("commentaire4");
-        commentaire2.add("commentaire5");
-        commentaires.add(commentaire1);
-        commentaires.add(commentaire2);*/
         
         mv.addObject("wallMessage", result);
         mv.addObject("user", login);
         mv.addObject("amis", amisString);
         mv.addObject("commentaires", commentaires);
         mv.addObject("questions", questionService.getQuestions(login));
+        mv.addObject("questionsAnswered", questionService.getQuestionsAnswered(login));
         return mv;
     }
     

@@ -120,15 +120,10 @@
 
                 <c:forEach items="${questions}" var="current" varStatus="ind">
                     <FORM method="POST" ACTION="wall.htm">
-                        <P> 
-                            ${current}
-                            <%-- <c:set var="foundUser" value="false"/>
-                            <c:forEach items="${current.getReponses()}" var="reponses">
-                                <c:if test="${reponses.getPersonne().getLogin() == user}">
-                                    <c:set var="foundUser" value="true"/>
-                                </c:if>
-                            </c:forEach>
-                            <c:if test="${foundUser eq 'false'}">
+                        
+                        <c:if test="${not questionsAnswered[ind.index]}">
+                            <P> 
+                                ${current}
                                 <INPUT type="hidden" name="question" value=${ind.index}>
                                 <INPUT type=submit name ="answer1" value="Choix 1" class="btn btn-default btn-lg input"> 
                                 <INPUT type=submit name ="answer2" value="Choix 2" class="btn btn-default btn-lg input"> 
@@ -143,7 +138,7 @@
                         </c:forEach>
                         <P> 
                             <INPUT Type=text Name=commentaire class="filltext">
-                            <INPUT type=submit value="Envoyer" Name=${ind.index} class="btn btn-default btn-lg input">
+                            <INPUT type=submit value="Envoyer" class="btn btn-default btn-lg input">
                         </P>
                     </FORM>   
                 </c:forEach>
@@ -155,25 +150,19 @@
                 <h4>Liste de questions</h4>
 
                 <c:forEach items="${questions}" var="current" varStatus="ind">
-                    <FORM method="POST" ACTION="wall.htm">
+                    <FORM method="GET" ACTION="wall.htm">
                         <P> 
                             ${current}
-                            <%-- <c:set var="foundUser" value="false"/>
-                            <c:forEach items="${current.getReponses()}" var="reponses">
-                                <c:if test="${reponses.getPersonne().getLogin() == user}">
-                                    <c:set var="foundUser" value="true"/>
-                                </c:if>
-                            </c:forEach>
-                            <c:if test="${foundUser eq false}">
-                                <INPUT type="hidden" name="question" value=${ind.index}>
-                                <INPUT type=submit name ="answer1" value="Choix 1" class="btn btn-default btn-lg input"> 
-                                <INPUT type=submit name ="answer2" value="Choix 2" class="btn btn-default btn-lg input"> 
-                                <br/>
-                            </c:if>
-                            <c:if test="${foundUser eq true}">
-                                Vous avez déjà répondu à cette question <br/>
-                            </c:if> --%>
-                        </P>  
+                            <INPUT type="hidden" name="question" value=${ind.index}>
+                        </P> 
+                        <c:forEach items="${commentaires[ind.index]}" var="currentComments">
+                            <P> ${currentComments} </P>
+                        </c:forEach>
+                        <P> 
+                            <INPUT type="hidden" name="user" value=${user}>
+                            <INPUT Type=text Name=commentaire class="filltext">
+                            <INPUT type=submit value="Envoyer" class="btn btn-default btn-lg input">
+                        </P>
                     </FORM>   
                 </c:forEach>
             </div>

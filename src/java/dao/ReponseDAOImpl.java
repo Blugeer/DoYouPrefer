@@ -60,4 +60,10 @@ public class ReponseDAOImpl implements ReponseDAO {
         Query q = em.createQuery("SELECT reponse FROM ReponseEntity reponse");
         return q.getResultList();
     }
+
+    @Override
+    public List<ReponseEntity> findByLogin(String login) {
+        Query q = em.createQuery("SELECT reponse FROM ReponseEntity reponse WHERE reponse.personneToReponse.login = :login").setParameter("login", login);
+        return q.getResultList();
+    }
 }

@@ -31,15 +31,14 @@ public class CreateGameController {
         
     @RequestMapping(value="createGame", method = RequestMethod.GET)
     public String init(){
-        return "index";
+        return "createGame";
     }
     
     @RequestMapping(value="createGame", method = RequestMethod.POST)
-    protected ModelAndView handleRequestInternal(
+    protected String handleRequestInternal(
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         HttpSession session;
-        ModelAndView mv = new ModelAndView("createGame");
         
         session = request.getSession(false);
         List<String> invites;
@@ -55,12 +54,11 @@ public class CreateGameController {
          * On vérifie que celui-ci existe et est dans la liste d'amis de l'utilisateur
          */
         if (request.getParameterMap().containsKey("loginParticipant")){
-            
             if (personneService.getUserByLogin(request.getParameter("loginParticipant")) != null){
                 ArrayList<String> amisLogin;
                 amisLogin = personneService.getAmisLogin((String)session.getAttribute("login"));
                 for (int i = 0; i < amisLogin.size(); i++){
-                    if (amisLogin.get(i).equals(request.getParameter("loginParticipant"))){
+                    if (amisLogin.get(i).equals(request.getParameter("loginParticipant")) && !invites.contains(request.getParameter("loginParticipant"))){
                         invites.add(amisLogin.get(i));
                     }
                 }
@@ -68,7 +66,6 @@ public class CreateGameController {
             }
         }
               
-        mv.addObject("participants", invites);
-        return mv;
+        return "createGame";
     }
 }

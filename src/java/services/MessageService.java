@@ -14,5 +14,5 @@ import dao.NotificationEntity;
  */
 public interface MessageService {
     public Boolean addNotification(NotificationEntity n);
-    public Boolean addMessage(String contenu, String login, Long idQuestion);
+    public Boolean addMessage(String contenu, String login, Integer idQuestion);
 }

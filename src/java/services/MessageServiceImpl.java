@@ -12,6 +12,8 @@ import dao.NotificationEntity;
 import dao.PersonneDAO;
 import dao.PersonneEntity;
 import dao.QuestionDAO;
+import dao.QuestionEntity;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,10 +44,11 @@ public class MessageServiceImpl implements MessageService {
     }
     
     @Override
-    public Boolean addMessage(String contenu, String login, Long idQuestion) {
+    public Boolean addMessage(String contenu, String login, Integer idQuestion) {
         if (!personneDAO.findByLogin(login).isEmpty()){
             PersonneEntity p = personneDAO.findByLogin(login).get(0);
-            MessageEntity commentaire = new MessageEntity(contenu, p, questionDAO.find(idQuestion));
+            List<QuestionEntity> questions = questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId());
+            MessageEntity commentaire = new MessageEntity(contenu, p, questions.get(idQuestion));
             messageDAO.save(commentaire);
             return true;
         }
