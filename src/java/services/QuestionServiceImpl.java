@@ -99,4 +99,49 @@ public class QuestionServiceImpl implements QuestionService{
         
         return questionsAnsweredByLogin;
     }
+    
+    @Override
+    public ArrayList<Float> getAnswerPercentage(String login){
+        List<QuestionEntity> questions = questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId());
+        List<ReponseEntity> reponses = reponseDAO.findAll();
+        ArrayList<Float> questionsAnswerPercentage = new ArrayList<>();
+        
+        float choix1 = 0;
+        float choix2 = 0; 
+
+        for (int i = 0; i < questions.size(); i++){
+            for (int j = 0; j < reponses.size(); j++){
+               if (questions.get(i).equals(reponses.get(j).getQuestion())){
+                   if (reponses.get(j).getChoix().equals(questions.get(i).getChoix1())){
+                       choix1++;
+                   }
+                   else{
+                       choix2++;
+                   }
+               }
+            }
+            if (choix1 == 0 && choix2 == 0){
+                questionsAnswerPercentage.add(-1.0f);
+            }
+            else{
+                questionsAnswerPercentage.add((choix1/(choix1+choix2))*100.0f);
+                choix1 = 0;
+                choix2 = 0;
+            }
+        }
+        
+        return questionsAnswerPercentage;
+    }
+
+    @Override
+    public ArrayList<String> getParticipants(String login, int index) {
+        ArrayList<String> participants = new ArrayList<>();
+        QuestionEntity q = questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId()).get(index);
+        for (int i = 0; i < q.getMurs().size(); i++){
+            if (!q.getMurs().get(i).getPersonne().getLogin().equals(login)){
+                participants.add(q.getMurs().get(i).getPersonne().getLogin());
+            }
+        }
+        return participants;
+    }
 }

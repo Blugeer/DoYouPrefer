@@ -5,8 +5,14 @@
  */
 package services;
 
+import dao.MurEntity;
 import dao.NotificationDAO;
 import dao.NotificationEntity;
+import dao.PersonneDAO;
+import dao.QuestionDAO;
+import dao.QuestionEntity;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +26,46 @@ public class MessageServiceImpl implements MessageService {
     
     @Autowired
     NotificationDAO notificationDAO;
+    
+    @Autowired
+    PersonneDAO personneDAO;
+    
+    @Autowired
+    QuestionDAO questionDAO;
 
     @Override
-    public Boolean addNotification(NotificationEntity n) {
+    public Boolean addNotification(String login, String message, ArrayList<String> totalParticipants) {
+        ArrayList<MurEntity> murs = new ArrayList<>();
+        for (int i = 0; i < totalParticipants.size(); i++){
+            if (!totalParticipants.get(i).equals(login)){
+                murs.add(personneDAO.findByLogin(totalParticipants.get(i)).get(0).getMur());
+            }
+        }
+        NotificationEntity n = new NotificationEntity(message, murs);
         notificationDAO.save(n);
+        return true;
+    }
+
+    @Override
+    public ArrayList<String> getNotifications(String login) {
+        List<NotificationEntity> notifs = notificationDAO.findByLogin(login);
+        ArrayList<String> notifsString = new ArrayList<>();
+        for (int i = 0; i < notifs.size(); i++){
+            notifsString.add(notifs.get(i).getMessage());
+        }
+        return notifsString;  
+    }
+    
+    @Override
+    public String getQuestionNotif (String login, int index){
+        QuestionEntity q = questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId()).get(index);
+        return q.toString();
+    }
+
+    @Override
+    public Boolean deleteNotif(String login) {
+        // Supprimer tous les enregistrements de la table
+        notificationDAO.deleteAll(login);
         return true;
     }
     

@@ -15,6 +15,8 @@ public interface NotificationDAO {
     public void save(NotificationEntity notif);
     public void update(NotificationEntity notif);
     public void delete(NotificationEntity notif);
+    public void deleteAll(String login);
     public NotificationEntity find(long id);
+    public List<NotificationEntity> findByLogin(String login);
     public List<NotificationEntity> findAll();
 }

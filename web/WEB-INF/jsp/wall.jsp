@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -96,7 +97,7 @@
                 </div>
             </div>
         </nav>
-                
+        
         <c:if test="${sessionScope.login == user}">
             <div class="container-fluid bg-1 text-center login">     
                 <h4>Liste d'amis</h4>
@@ -130,8 +131,40 @@
                                 <br/>
                             </P>
                         </c:if>
+                        <c:if test="${questionsAnswered[ind.index]}">
+                            <P> 
+                                ${current} Vous avez déjà répondu à cette question
+                                <br/>
+                            </P>
+                        </c:if>
+                        <div class="progress">
+                            <c:if test="${questionsPercentages[ind.index] == -1}">
+                                <div class="progress-bar progress-bar-success" role="progressbar" style="width:100%">
+                                    Aucune réponse donnée
+                                </div>
+                            </c:if>
+                            <c:if test="${questionsPercentages[ind.index] > -1}"> 
+                                <div class="progress-bar progress-bar-success" role="progressbar" style="width:${questionsPercentages[ind.index]}%">
+                                  <fmt:formatNumber value="${questionsPercentages[ind.index]}" maxFractionDigits="2"/>%
+                                </div>
+                                <div class="progress-bar progress-bar-warning" role="progressbar" style="width:${100-questionsPercentages[ind.index]}%">
+                                  <fmt:formatNumber value="${100-questionsPercentages[ind.index]}" maxFractionDigits="2"/>%
+                                </div>
+                            </c:if>
+                        </div>
                     </FORM>   
                 </c:forEach>
+                
+                <h4>Notifications</h4>
+                
+                <c:forEach items="${notifs}" var="current">
+                    <p>
+                        ${current} <br/>
+                    </p>
+                </c:forEach>
+                <FORM method="POST" ACTION="wall.htm">
+                    <INPUT type="submit" name="deleteNotif" value="Supprimer les notifications">
+                </FORM>
             </div>
         </c:if>
         
