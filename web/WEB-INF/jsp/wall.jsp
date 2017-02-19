@@ -131,7 +131,7 @@
                             </c:if>
                             <c:if test="${foundUser eq 'true'}">
                                 Vous avez déjà répondu à cette question <br/>
-                            </c:if> --%>
+                            </c:if>
                         </P>
                         <c:forEach items="${commentaires[ind.index]}" var="currentComments">
                             <P> ${currentComments} </P>
