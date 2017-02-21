@@ -50,6 +50,9 @@ public class PersonneEntity implements Serializable {
     
     @OneToMany(mappedBy="personneToReponse")
     private List<ReponseEntity> reponses;
+   
+    @OneToMany(mappedBy="personneToQuestion")
+    private List<QuestionEntity> questions;
 
     @OneToOne(mappedBy="personneToMur")
     MurEntity mur;
@@ -67,6 +70,7 @@ public class PersonneEntity implements Serializable {
         this.amis = new ArrayList<>();
         this.messages = new ArrayList<>();
         this.reponses = new ArrayList<>();
+        this.questions = new ArrayList<>();
         this.mur = new MurEntity(this, new ArrayList<>(), new ArrayList<>());
     }
     
@@ -78,6 +82,9 @@ public class PersonneEntity implements Serializable {
     
     public List<ReponseEntity> getReponses() { return reponses; }
     public void setReponses(List<ReponseEntity> reponses) { this.reponses=reponses; }
+    
+    public List<QuestionEntity> getQuestions() { return questions; }
+    public void setQuestions(List<QuestionEntity> questions) { this.questions=questions; }
     
     public MurEntity getMur() { return this.mur; }
     public void setMur(MurEntity mur) { this.mur=mur; }

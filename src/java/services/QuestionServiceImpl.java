@@ -36,7 +36,7 @@ public class QuestionServiceImpl implements QuestionService{
     PersonneService personneService;
     
     @Override
-    public Boolean addQuestion(String choix1, String choix2, ArrayList<String> totalParticipants){
+    public Boolean addQuestion(String choix1, String choix2, ArrayList<String> totalParticipants, String login){
         ArrayList<MurEntity> murs = new ArrayList<>();
         for (int i = 0; i < totalParticipants.size(); i++){
             if (personneDAO.findByLogin(totalParticipants.get(i)).size() > 0){
@@ -44,7 +44,7 @@ public class QuestionServiceImpl implements QuestionService{
             }
         }
                      
-        QuestionEntity q = new QuestionEntity(choix1, choix2, murs);
+        QuestionEntity q = new QuestionEntity(choix1, choix2, murs, personneDAO.findByLogin(login).get(0));
         questionDAO.save(q);
         return true;
     }

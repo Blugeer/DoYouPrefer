@@ -9,6 +9,9 @@ import dao.MurEntity;
 import dao.NotificationDAO;
 import dao.NotificationEntity;
 import dao.PersonneDAO;
+import dao.PersonneEntity;
+import dao.MessageDAO;
+import dao.MessageEntity;
 import dao.QuestionDAO;
 import dao.QuestionEntity;
 import java.util.ArrayList;
@@ -33,6 +36,9 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     QuestionDAO questionDAO;
 
+    @Autowired
+    MessageDAO messageDAO;
+    
     @Override
     public Boolean addNotification(String login, String message, ArrayList<String> totalParticipants) {
         ArrayList<MurEntity> murs = new ArrayList<>();
@@ -67,6 +73,18 @@ public class MessageServiceImpl implements MessageService {
         // Supprimer tous les enregistrements de la table
         notificationDAO.deleteAll(login);
         return true;
+    }
+    
+    @Override
+    public Boolean addMessage(String contenu, String login, Integer idQuestion) {
+        if (!personneDAO.findByLogin(login).isEmpty()){
+            PersonneEntity p = personneDAO.findByLogin(login).get(0);
+            List<QuestionEntity> questions = questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId());
+            MessageEntity commentaire = new MessageEntity(contenu, p, questions.get(idQuestion));
+            messageDAO.save(commentaire);
+            return true;
+        }
+        return false;
     }
     
 }

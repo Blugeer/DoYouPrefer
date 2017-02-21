@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import dao.MessageEntity;
 import dao.MurEntity;
 import dao.NotificationEntity;
 import dao.PersonneEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import services.MessageService;
 import services.PersonneService;
 import services.QuestionService;
+import services.MessageService;
 
 /**
  * @author natha_000
@@ -60,9 +62,12 @@ public class WallController {
                     mv.addObject("questions", questionsString);
                     mv.addObject("questionsAnswered", questionService.getQuestionsAnswered(user));
                     mv.addObject("questionsPercentages", questionService.getAnswerPercentage(user));
+                    ArrayList<ArrayList<String>> commentaires = personneService.getMessagesLogin(user);
+                    mv.addObject("commentaires", commentaires);
                 }
             }
         }
+
 	return mv;
     }
      
@@ -86,6 +91,7 @@ public class WallController {
             prenom = request.getParameter("prenom");
             mdp = request.getParameter("mdp");
             mail = request.getParameter("mail");
+
             
             // Cas où le login et le mdp sont renseignés
             if (login != null && login.length() > 0 && mdp != null && mdp.length() > 0){
@@ -122,6 +128,7 @@ public class WallController {
                mv = addErrorMessage("Erreur lors du renseignement de paramètres");
                return mv;
             }
+
         }
         // Si le paramètre login n'existe pas dans la requêtre POST
         else{
@@ -187,7 +194,7 @@ public class WallController {
                         session.setAttribute("participants", new ArrayList<>());
                     }
                     
-                    if(!questionService.addQuestion(choix1, choix2, totalParticipants)){
+                    if(!questionService.addQuestion(choix1, choix2, totalParticipants, (String)session.getAttribute("login"))){
                         mv = addErrorMessage("Erreur lors de l'ajout de question");
                         return mv;
                     }
@@ -206,12 +213,29 @@ public class WallController {
             }
         }
         
+        if (request.getParameterMap().containsKey("commentaire")){
+            if (request.getParameterMap().containsKey("user")){
+                // Si l'ajout d'un commentaire ne se passe pas bien, on affiche un message d'erreur
+                if(!messageService.addMessage(request.getParameter("commentaire"), request.getParameter("user").toString(), Integer.parseInt(request.getParameter("question")))){
+                    mv = addErrorMessage("Erreur lors de l'ajout du commentaire");
+                    return mv;
+                }
+            }
+            else{
+                if(!messageService.addMessage(request.getParameter("commentaire"), session.getAttribute("login").toString(), Integer.parseInt(request.getParameter("question")))){
+                    mv = addErrorMessage("Erreur lors de l'ajout du commentaire");
+                    return mv;
+                }
+            }
+        }
+                        
         String result = "Bienvenue sur ton mur " + login;
-        //messages = (ArrayList<String>)session.getAttribute("messages");
+        ArrayList<ArrayList<String>> commentaires = personneService.getMessagesLogin(login);
         
         mv.addObject("wallMessage", result);
         mv.addObject("user", login);
         mv.addObject("amis", amisString);
+        mv.addObject("commentaires", commentaires);
         mv.addObject("questions", questionService.getQuestions(login));
         mv.addObject("questionsAnswered", questionService.getQuestionsAnswered(login));
         mv.addObject("questionsPercentages", questionService.getAnswerPercentage(login));

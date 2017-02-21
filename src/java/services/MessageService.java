@@ -5,6 +5,8 @@
  */
 package services;
 
+import dao.MessageEntity;
+import dao.NotificationEntity;
 import java.util.ArrayList;
 
 /**
@@ -16,4 +18,5 @@ public interface MessageService {
     public ArrayList<String> getNotifications(String login);
     public String getQuestionNotif (String login, int index);
     public Boolean deleteNotif (String login);
+    public Boolean addMessage(String contenu, String login, Integer idQuestion);
 }

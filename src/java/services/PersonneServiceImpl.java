@@ -5,6 +5,7 @@
  */
 package services;
 
+import dao.MessageEntity;
 import dao.PersonneDAO;
 import dao.PersonneEntity;
 import dao.QuestionDAO;
@@ -91,9 +92,33 @@ public class PersonneServiceImpl implements PersonneService {
         }
         return questionsString;
     }
+    
+    /*@Override
+    public ArrayList<String> getQuestionsLogin(String login) {
+        ArrayList<QuestionEntity> questions = new ArrayList<>(personneDAO.findByLogin(login).get(0));
+        return questions;
+    }*/
 
     @Override
     public Boolean getUserByLogin(String login) {
         return (personneDAO.findByLogin(login).size() > 0);
+    }
+    
+    @Override
+    public ArrayList<ArrayList<String>> getMessagesLogin(String login){
+        ArrayList<ArrayList<String>> commentaires = new ArrayList<>();
+        List<QuestionEntity> questions = questionDAO.findByMur(personneDAO.findByLogin(login).get(0).getMur().getId());
+        for(int i=0 ; i<questions.size() ; i++){
+            ArrayList<String> UtilisateurCommentaireList = new ArrayList<>();
+            if(!questions.get(i).getMessages().isEmpty()){
+                for(int j=0 ; j<questions.get(i).getMessages().size() ; j++){
+                    MessageEntity message = questions.get(i).getMessages().get(j);
+                    String UtilisateurCommentaire = message.getPersonne().getLogin() + " : " + message.getContenu();
+                    UtilisateurCommentaireList.add(UtilisateurCommentaire);
+                }
+            }
+            commentaires.add(UtilisateurCommentaireList);
+        }
+        return commentaires;
     }
 }

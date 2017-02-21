@@ -149,6 +149,13 @@
                 border: 1px solid #ccc;
                 box-sizing: border-box;
             }
+            .question{
+                display: inline-block;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+                background-color : #f1f1f1;
+                width : 100%;
+            }
             
         </style>
     </head>
@@ -214,16 +221,19 @@
                         </div>
 
                         <c:forEach items="${questions}" var="current" varStatus="ind">
-                            <FORM method="POST" ACTION="wall.htm">
-
+                            
+                            <div class="question">
+                            
                                 <c:if test="${not questionsAnswered[ind.index]}">
+                                    <FORM method="POST" ACTION="wall.htm">
                                     <P> 
                                         ${current}
                                         <INPUT type="hidden" name="question" value=${ind.index}>
-                                        <INPUT type=submit name ="answer1" value="Choix 1" class="btn btn-default btn-lg input"> 
-                                        <INPUT type=submit name ="answer2" value="Choix 2" class="btn btn-default btn-lg input"> 
+                                        <INPUT type=submit name ="answer1" value="Choix 1" class="button btn btn-info"> 
+                                        <INPUT type=submit name ="answer2" value="Choix 2" class="button btn btn-info"> 
                                         <br/>
                                     </P>
+                                    </FORM> 
                                 </c:if>
                                 <c:if test="${questionsAnswered[ind.index]}">
                                     <P> 
@@ -231,7 +241,7 @@
                                         <br/>
                                     </P>
                                 </c:if>
-                                <div class="progress">
+                                <div class="progress container-fluid">
                                     <c:if test="${questionsPercentages[ind.index] == -1}">
                                         <div class="progress-bar progress-bar-success" role="progressbar" style="width:100%">
                                             Aucune réponse donnée
@@ -246,7 +256,16 @@
                                         </div>
                                     </c:if>
                                 </div>
-                            </FORM>   
+                                <c:forEach items="${commentaires[ind.index]}" var="currentComments">
+                                    <P> ${currentComments} </P>
+                                </c:forEach>
+                                <FORM method="POST" ACTION="wall.htm">    
+                                    <INPUT Type=text Name=commentaire class="filltext">
+                                    <INPUT type=submit value="Envoyer" class="btn btn-default btn-lg input">
+                                </FORM>
+                                    
+                                </div>
+                              
                         </c:forEach>
                     </div>
                 </div>
@@ -275,20 +294,52 @@
                             <button class="btn" type="submit"> Ajouter l'ami </button> 
                         </FORM>
                     </div>
-                </div>
+                </div> 
         </c:if>
+                
         
         <c:if test="${sessionScope.login != user}">
             <div class="container-fluid bg-2 text-center otheruser">
-                <h4>Liste de questions</h4>
-
+                
+                <h4> Les questions de ${user} </h4>
+                
+                
                 <c:forEach items="${questions}" var="current" varStatus="ind">
-                    <FORM method="POST" ACTION="wall.htm">
+                    <div class="question">
+                        <FORM method="POST" ACTION="wall.htm">
+                            <P> 
+                                ${current}
+                                <INPUT type="hidden" name="question" value=${ind.index}>
+                                <br/>
+                            </P>
+                        </FORM>
+                        <div class="progress container-fluid">
+                                    <c:if test="${questionsPercentages[ind.index] == -1}">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" style="width:100%">
+                                            Aucune réponse donnée
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${questionsPercentages[ind.index] > -1}"> 
+                                        <div class="progress-bar progress-bar-success" role="progressbar" style="width:${questionsPercentages[ind.index]}%">
+                                          <fmt:formatNumber value="${questionsPercentages[ind.index]}" maxFractionDigits="2"/>%
+                                        </div>
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" style="width:${100-questionsPercentages[ind.index]}%">
+                                          <fmt:formatNumber value="${100-questionsPercentages[ind.index]}" maxFractionDigits="2"/>%
+                                        </div>
+                                    </c:if>
+                        </div>
+                        <%-- <c:forEach items="${commentaires[ind.index]}" var="currentComments">
+                            <P> ${currentComments} </P>
+                        </c:forEach>
                         <P> 
-                            ${current}
-                        </P>  
-                    </FORM>   
+                            <INPUT type="hidden" name="user" value=${user}>
+                            <INPUT Type=text Name=commentaire class="filltext">
+                            <INPUT type=submit value="Envoyer" class="btn btn-default btn-lg input">
+                        </P> --%>   
+                    </div>
                 </c:forEach>
+                
+                <br/>
             </div>
         </c:if>
                 
