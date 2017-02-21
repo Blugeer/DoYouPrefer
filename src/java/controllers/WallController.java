@@ -60,9 +60,10 @@ public class WallController {
                     mv.addObject("user", user);
                     mv.addObject("wallMessage", result);
                     mv.addObject("questions", questionsString);
+                    mv.addObject("questionsAnswered", questionService.getQuestionsAnswered(user));
+                    mv.addObject("questionsPercentages", questionService.getAnswerPercentage(user));
                     ArrayList<ArrayList<String>> commentaires = personneService.getMessagesLogin(user);
                     mv.addObject("commentaires", commentaires);
-                    mv.addObject("questionsAnswered", questionService.getQuestionsAnswered(login));
                 }
             }
         }
@@ -79,6 +80,7 @@ public class WallController {
         String login, nom, prenom, mdp, mail;
         List<String> amisString;
         List<String> questionsString;
+        String messageNotif;
         
         
         // Si le paramètre login existe dans la requêtre POST (connexion ou création de compte)
@@ -151,13 +153,21 @@ public class WallController {
                  * Si l'on observe qu'une réponse a été sélectionnée
                  */
                 if(request.getParameterMap().containsKey("answer1") || request.getParameterMap().containsKey("answer2")){
-                    if (request.getParameterMap().containsKey("answer1") && request.getParameterMap().containsKey("question")){
+                    if (request.getParameterMap().containsKey("question")){
                         int index = Integer.parseInt(request.getParameter("question"));
-                        questionService.addReponse(login, index, 1); 
-                    }
-                    if (request.getParameterMap().containsKey("answer2") && request.getParameterMap().containsKey("question")){
-                        int index = Integer.parseInt(request.getParameter("question"));
-                        questionService.addReponse(login, index, 2);
+                        if (request.getParameterMap().containsKey("answer1")){
+                            questionService.addReponse(login, index, 1); 
+                        }
+                        else if (request.getParameterMap().containsKey("answer2")){
+                            questionService.addReponse(login, index, 2);
+                        }
+                        String question = messageService.getQuestionNotif(login, index);
+                        messageNotif = login + " a répondu à la question : " + question; 
+                        ArrayList<String> totalParticipants = questionService.getParticipants(login, index);
+                        if (!messageService.addNotification(login, messageNotif, totalParticipants)){
+                            mv = addErrorMessage("Problème d'envoi de notification");
+                            return mv;
+                        }
                     }
                 }  
                 
@@ -176,11 +186,11 @@ public class WallController {
                         for (int i = 0; i < participants.size(); i++){
                             totalParticipants.add(participants.get(i));
                         }
-                        /*NotificationEntity n = new NotificationEntity("Vous avez reçu une nouvelle question de " + session.getAttribute("login"), murs);
-                        if (!messageService.addNotification(n)){
+                        messageNotif = "Vous avez reçu une nouvelle question de la part de " + login;
+                        if (!messageService.addNotification(login, messageNotif, totalParticipants)){
                             mv = addErrorMessage("Problème d'envoi de notification");
                             return mv;
-                        }*/
+                        }
                         session.setAttribute("participants", new ArrayList<>());
                     }
                     
@@ -190,6 +200,10 @@ public class WallController {
                     }
                     
                     session.setAttribute("questions", questionService.getQuestions(login));
+                }
+                
+                if(request.getParameterMap().containsKey("deleteNotif")){
+                    messageService.deleteNotif(login);
                 }
             }
             // Sinon message d'erreur
@@ -224,6 +238,8 @@ public class WallController {
         mv.addObject("commentaires", commentaires);
         mv.addObject("questions", questionService.getQuestions(login));
         mv.addObject("questionsAnswered", questionService.getQuestionsAnswered(login));
+        mv.addObject("questionsPercentages", questionService.getAnswerPercentage(login));
+        mv.addObject("notifs", messageService.getNotifications(login));
         return mv;
     }
     

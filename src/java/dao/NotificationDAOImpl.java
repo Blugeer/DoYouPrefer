@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -47,10 +48,27 @@ public class NotificationDAOImpl implements NotificationDAO {
         em.remove(notif);
     }
     
+    @Transactional
+    @Override
+    public void deleteAll(String login) {
+        Query q = em.createQuery("SELECT notif FROM NotificationEntity notif LEFT JOIN notif.murs m LEFT JOIN m.personneToMur p WHERE p.login = :login").setParameter("login", login);
+        List<NotificationEntity> notifToDelete = q.getResultList();
+        for (int i = 0; i < notifToDelete.size(); i++){
+            em.remove(notifToDelete.get(i));
+        }
+    }
+    
     @Transactional(readOnly = true)
     @Override
     public NotificationEntity find(long id){
         return em.find(NotificationEntity.class, id);
+    }
+    
+    @Transactional
+    @Override
+    public List<NotificationEntity> findByLogin(String login) {
+        Query q = em.createQuery("SELECT notif FROM NotificationEntity notif LEFT JOIN notif.murs m LEFT JOIN m.personneToMur p WHERE p.login = :login").setParameter("login", login);
+        return q.getResultList();
     }
     
     @Transactional(readOnly =true)
@@ -58,5 +76,5 @@ public class NotificationDAOImpl implements NotificationDAO {
     public List<NotificationEntity> findAll() {
         Query q = em.createQuery("SELECT notif FROM NotificationEntity notif");
         return q.getResultList();
-    }
+    }  
 }

@@ -20,4 +20,8 @@ public interface QuestionService {
     public ArrayList<String> getQuestions(String login);
     // Renvoie une liste de booléens permettant de savoir à quelles questions un utilisateur a déjà répondu
     public ArrayList<Boolean> getQuestionsAnswered(String login);
+    // Permet de récupérer les pourcentages de réponses d'un choix pour chaque question
+    public ArrayList<Float> getAnswerPercentage(String login);
+    // Renvoie la liste des participants pour une question donnée
+    public ArrayList<String> getParticipants(String login, int index);
 }
